@@ -4,22 +4,33 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.RomiDrivetrain;
 
-public class ToggleLED extends CommandBase {
-  /** Creates a new Toggleled. */
-  private DigitalOutput r_led;
+public class TimedAutoDrive extends CommandBase {
 
-  public ToggleLED(DigitalOutput digitalout) {
+  double m_time_sec;
+  RomiDrivetrain m_Drivetrain;
+  double m_powerLeft;
+  double m_powerRight;
+  double m_startTime_sec;
+
+  /** Creates a new TimedAutoDrive. */
+  public TimedAutoDrive(double time_sec, RomiDrivetrain Drivetrain, double powerLeft, double powerRight) {
     // Use addRequirements() here to declare subsystem dependencies.
-    r_led = digitalout;
+
+    m_time_sec = time_sec;
+    m_Drivetrain = Drivetrain;
+    m_powerLeft = powerLeft;
+    m_powerRight = powerRight;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    r_led.set(!r_led.get());
+    m_startTime_sec = RobotController.getFPGATime();
+    m_startTime_sec = m_startTime_sec / 1000000;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,6 +46,6 @@ public class ToggleLED extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

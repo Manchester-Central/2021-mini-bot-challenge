@@ -4,35 +4,41 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ToggleLED extends CommandBase {
-  /** Creates a new Toggleled. */
-  private DigitalOutput m_led;
+public class TimedDrive extends CommandBase {
+  long m_runTime_ms = 0;
 
-  public ToggleLED(DigitalOutput digitalout) {
+  /** Creates a new TimedDrive. */
+  public TimedDrive(long time_ms) {
     // Use addRequirements() here to declare subsystem dependencies.
-  m_led = digitalout;
+    m_runTime_ms = time_ms;
+  }
+
+  /** Creates a new TimedDrive. */
+  public TimedDrive(double time_s) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_runTime_ms = (long) time_s * 1000;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  m_led.set(!m_led.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

@@ -49,6 +49,8 @@ public class RobotContainer {
     m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
     JoystickButton a = new JoystickButton(Driver, 1);
     a.whenPressed(new ToggleLED(greenlight));
+    JoystickButton x = new JoystickButton(Driver, 3);
+    x.toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
   }
 
   /**

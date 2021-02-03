@@ -60,4 +60,8 @@ public class RomiDrivetrain extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  public void TankDrive(double leftPower, double rightPower) {
+    m_diffDrive.tankDrive(leftPower, rightPower);
+  }
 }

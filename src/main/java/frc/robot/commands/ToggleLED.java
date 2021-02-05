@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ToggleLED extends CommandBase {
   /** Creates a new Toggleled. */
-  private DigitalOutput r_led;
+  private DigitalOutput m_led;
 
   public ToggleLED(DigitalOutput digitalout) {
     // Use addRequirements() here to declare subsystem dependencies.
-  r_led = digitalout;
+  m_led = digitalout;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  r_led.set(!r_led.get());
+  m_led.set(!m_led.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

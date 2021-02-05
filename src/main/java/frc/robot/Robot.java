@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.time.Year;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,8 +44,8 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    SmartDashboard.putNumber("x", m_robotContainer.Driver.getRawAxis(0));
     CommandScheduler.getInstance().run();
+    SmartDashboard.putString("gamepad", m_robotContainer.Driver.getControllerName());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

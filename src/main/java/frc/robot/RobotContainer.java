@@ -6,16 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.ToggleLED;
-import frc.robot.subsystems.PushButton;
 import frc.robot.subsystems.RomiDrivetrain;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,8 +25,7 @@ public class RobotContainer {
   private DigitalOutput greenlight = new DigitalOutput(1);
   private DigitalOutput redlight = new DigitalOutput(2);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
-  PushButton m_buttonA = new PushButton(0);
-  public Joystick Driver = new Joystick(0);
+  public Gamepad Driver = new Gamepad(0);
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -47,10 +43,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
-    JoystickButton a = new JoystickButton(Driver, 1);
-    a.whenPressed(new ToggleLED(greenlight));
-    JoystickButton x = new JoystickButton(Driver, 3);
-    x.toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
+    Driver.getAButton().whenPressed(new ToggleLED(greenlight));
+    Driver.getXButton().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
   }
 
   /**

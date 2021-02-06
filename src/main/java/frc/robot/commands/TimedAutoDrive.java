@@ -46,6 +46,16 @@ public class TimedAutoDrive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+
+    double m_endTime = m_startTime_sec + m_time_sec;
+    double m_currentTime = RobotController.getFPGATime();
+    m_currentTime = m_currentTime / 1000000;
+
+    if ( > m_endTime) {
+      return false;
+    }
+    return true;
   }
 }
+// | S 9 8 7 6 5 4 3 2 1 E
+// 0 1 2 3 4 5 6 7 8 9 0 1 2

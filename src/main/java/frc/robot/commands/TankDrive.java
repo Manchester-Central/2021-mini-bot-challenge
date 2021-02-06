@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Gamepad;
+import frc.robot.gamepads.Gamepad;
 import frc.robot.subsystems.RomiDrivetrain;
 
 public class TankDrive extends CommandBase {

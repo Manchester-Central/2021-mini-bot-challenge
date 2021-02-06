@@ -12,6 +12,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.ToggleLED;
+import frc.robot.gamepads.Gamepad;
 import frc.robot.subsystems.RomiDrivetrain;
 
 /**
@@ -25,7 +26,7 @@ public class RobotContainer {
   private DigitalOutput greenlight = new DigitalOutput(1);
   private DigitalOutput redlight = new DigitalOutput(2);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
-  public Gamepad Driver = new Gamepad(0);
+  public Gamepad Driver = new Gamepad(0, "Driver");
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -43,8 +44,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
-    Driver.getAButton().whenPressed(new ToggleLED(greenlight));
-    Driver.getXButton().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
+    Driver.getButtonA().whenPressed(new ToggleLED(greenlight));
+    Driver.getButtonX().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
   }
 
   /**

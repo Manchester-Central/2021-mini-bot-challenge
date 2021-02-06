@@ -20,11 +20,13 @@ public class TimedAutoDrive extends CommandBase {
   /** Creates a new TimedAutoDrive. */
   public TimedAutoDrive(double timeTarget_sec, RomiDrivetrain Drivetrain, double powerLeft, double powerRight) {
     // Use addRequirements() here to declare subsystem dependencies.
-
+    
     m_timeTarget_sec = timeTarget_sec;
     m_Drivetrain = Drivetrain;
     m_powerLeft = powerLeft;
     m_powerRight = powerRight;
+
+    addRequirements(m_Drivetrain);
   }
 
   // Called when the command is initially scheduled.

@@ -35,7 +35,11 @@ public class RomiDrivetrain extends SubsystemBase {
   }
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
-    m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
+    arcadeDrive(xaxisSpeed, zaxisRotate, false);
+  }
+
+  public void arcadeDrive(double xaxisSpeed, double zaxisRotate, boolean smoothing) {
+    m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate, smoothing);
   }
 
   public void resetEncoders() {
@@ -62,6 +66,10 @@ public class RomiDrivetrain extends SubsystemBase {
   }
 
   public void TankDrive(double leftPower, double rightPower) {
-    m_diffDrive.tankDrive(leftPower, rightPower);
+   TankDrive(leftPower, rightPower, false);
+  }
+
+  public void TankDrive(double leftPower, double rightPower, boolean smoothing) {
+    m_diffDrive.tankDrive(leftPower, rightPower, smoothing);
   }
 }

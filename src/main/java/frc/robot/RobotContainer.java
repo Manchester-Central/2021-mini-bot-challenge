@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.TimedAutoDrive;
 import frc.robot.commands.ToggleLED;
 import frc.robot.subsystems.PushButton;
 import frc.robot.subsystems.RomiDrivetrain;
@@ -53,6 +54,8 @@ public class RobotContainer {
     a.whenPressed(new ToggleLED(greenLed));
     JoystickButton x = new JoystickButton(Driver, 3);
     x.toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
+    JoystickButton b = new JoystickButton(Driver, 2);
+    b.whenPressed(new TimedAutoDrive(4, m_romiDrivetrain, 0.35, 0.351));
   }
 
   /**

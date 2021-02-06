@@ -12,6 +12,7 @@ public class ArcadeDrive extends CommandBase {
   /** Creates a new ArcadeDrive. */
   Joystick m_Driver;
   RomiDrivetrain m_Drivetrain;
+
   public ArcadeDrive(Joystick Driver, RomiDrivetrain Drivetrain) {
     m_Driver = Driver;
     m_Drivetrain = Drivetrain;
@@ -21,17 +22,19 @@ public class ArcadeDrive extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Drivetrain.arcadeDrive(m_Driver.getRawAxis(1), m_Driver.getRawAxis(0));
+    m_Drivetrain.arcadeDrive(m_Driver.getRawAxis(1), m_Driver.getRawAxis(0), true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

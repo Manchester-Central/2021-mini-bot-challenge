@@ -16,6 +16,12 @@ This code is CHAOS' (FRC TEAM 131) code for controlling the [Romi minibot](https
     - Or configure the Raspberry Pi to connect to your own network (a guide is needed for that)
 4. Download this project from Gitub and open it with 2021 WPILib VS Code and [run the program](https://docs.wpilib.org/en/latest/docs/romi-robot/programming-romi.html#running-a-romi-program)
 
+### Getting the Romi's IP Address:
+When connected to the same network as the Romi, you can run the following command to get the Romi's IP address:
+``` batch
+ping wpilibpi -4 -n 1
+```
+
 ## Git helpers (for team members learning git)
 
 These commands will help you do some of the basic git actions we will need to remotely work on this project

@@ -6,6 +6,9 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
 // Set this to true to enable desktop support.

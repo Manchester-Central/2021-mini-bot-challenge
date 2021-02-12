@@ -28,6 +28,8 @@ public class Gamepad {
     private Button m_buttonRT;
     private Button m_buttonSelect;
     private Button m_buttonStart;
+    private Button m_buttonLeftStick;
+    private Button m_buttonRightStick;
 
     private final XboxControllerMapping m_xboxControllerMapping = new XboxControllerMapping();
     private final LogitechControllerMapping m_logitechControllerMapping = new LogitechControllerMapping();
@@ -46,6 +48,8 @@ public class Gamepad {
         m_buttonRT = createButton(ButtonType.RightTrigger);
         m_buttonSelect = createButton(ButtonType.Select);
         m_buttonStart = createButton(ButtonType.Start);
+        m_buttonLeftStick = createButton(ButtonType.LeftStick);
+        m_buttonRightStick = createButton(ButtonType.RightStick);
 
         addShuffleboeardTab();
     }
@@ -120,6 +124,14 @@ public class Gamepad {
         return m_buttonStart;
     }
 
+    public Button getButtonLeftStick() {
+        return m_buttonLeftStick;
+    }
+
+    public Button getButtonRightStick() {
+        return m_buttonRightStick;
+    }    
+
     private Button createButton(ButtonType buttonType) {
         return new Button() {
             public boolean get() {
@@ -140,6 +152,8 @@ public class Gamepad {
         addButtonToDashboard(tab, "RT", m_buttonRT);
         addButtonToDashboard(tab, "Select", m_buttonSelect);
         addButtonToDashboard(tab, "Start", m_buttonStart);
+        addButtonToDashboard(tab, "LS", m_buttonLeftStick);
+        addButtonToDashboard(tab, "RS", m_buttonRightStick);
 
         tab.addNumber("Left X", new DoubleSupplier(){
             public double getAsDouble() { return getLeftX(); };

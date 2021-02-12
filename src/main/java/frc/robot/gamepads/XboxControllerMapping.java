@@ -51,6 +51,10 @@ public class XboxControllerMapping implements IControllerMapping {
                 return joystick.getRawButton(7);
             case Start:
                 return joystick.getRawButton(8);
+            case LeftStick:
+                return joystick.getRawButton(9);
+            case RightStick:
+                return joystick.getRawButton(10);                
             default:
                 System.err.println("Button type not supported: " + buttonType.toString());
                 return false;

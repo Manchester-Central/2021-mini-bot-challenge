@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import java.sql.Driver;
+
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TimedAutoDrive;
@@ -57,6 +60,8 @@ public class RobotContainer {
     TimedAutoDrive driveforward = new TimedAutoDrive(3, m_romiDrivetrain, 0.35, 0.35);
     TimedAutoDrive drivebackward = new TimedAutoDrive(3, m_romiDrivetrain, -0.35, -0.35);
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
+    Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
+    Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
   }
 
   /**

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.PidDrive;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TimedAutoDrive;
 import frc.robot.commands.ToggleLED;
@@ -62,6 +63,7 @@ public class RobotContainer {
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
+    Driver.getButtonRB().whileHeld(new PidDrive(12, 12, m_romiDrivetrain));
   }
 
   /**

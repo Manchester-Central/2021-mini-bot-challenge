@@ -7,17 +7,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.RomiDrivetrain;
 
-
-
 public class PidDrive extends CommandBase {
   /** Creates a new PidDrive. */
   private double m_distanceTargetLeft_in;
   private double m_distanceTargetRight_in;
   private RomiDrivetrain m_drivetrain;
-    
-  
 
-  public PidDrive(double distanceTargetRight_in,double distanceTargetLeft_in , RomiDrivetrain drivetrain) {
+  public PidDrive(double distanceTargetRight_in, double distanceTargetLeft_in, RomiDrivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_distanceTargetLeft_in = distanceTargetLeft_in;
     m_distanceTargetRight_in = distanceTargetRight_in;
@@ -28,7 +24,8 @@ public class PidDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.SetPidTarget(m_drivetrain.getLeftDistanceInch() + m_distanceTargetLeft_in, m_drivetrain.getRightDistanceInch() + m_distanceTargetRight_in);
+    m_drivetrain.SetPidTarget(m_drivetrain.getLeftDistanceInch() + m_distanceTargetLeft_in,
+        m_drivetrain.getRightDistanceInch() + m_distanceTargetRight_in);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,11 +36,12 @@ public class PidDrive extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_drivetrain.TargetReached();
   }
 }

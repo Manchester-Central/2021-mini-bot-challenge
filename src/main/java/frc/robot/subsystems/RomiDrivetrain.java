@@ -7,8 +7,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RomiDrivetrain extends SubsystemBase {
@@ -27,9 +29,9 @@ public class RomiDrivetrain extends SubsystemBase {
 
   // Set up the differential drive controller
   private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
-
-  private PIDController leftPidController = new PIDController(0.5, 0, 0);
-  private PIDController rightPidController = new PIDController(0.5, 0, 0);
+  private TrapezoidProfile.Constraints Constraints = new TrapezoidProfile.Constraints(15,15);
+  private ProfiledPIDController leftPidController = new ProfiledPIDController(0.357, 0, 0, Constraints);
+  private ProfiledPIDController rightPidController = new ProfiledPIDController(0.357, 0, 0, Constraints);
 
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
@@ -84,11 +86,13 @@ public class RomiDrivetrain extends SubsystemBase {
     double PowerLeft = leftPidController.calculate(getLeftDistanceInch());
     double PowerRight = rightPidController.calculate(getRightDistanceInch());
     TankDrive(PowerLeft, PowerRight);
+    SmartDashboard.putNumber("PowerLeft", PowerLeft);
+    SmartDashboard.putNumber("PowerRight", PowerRight);
   }
 
   public void SetPidTarget(double TargetLeft_in, double TargetRight_in) {
-    leftPidController.setSetpoint(TargetLeft_in);
-    rightPidController.setSetpoint(TargetRight_in);
+    leftPidController.setGoal(TargetLeft_in);
+    rightPidController.setGoal(TargetRight_in);
   }
 
   public boolean TargetReached() {

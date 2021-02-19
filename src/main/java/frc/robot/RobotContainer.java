@@ -63,7 +63,7 @@ public class RobotContainer {
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
-    Driver.getButtonRB().whileHeld(new PidDrive(12, 12, m_romiDrivetrain));
+    Driver.getButtonRB().whileActiveOnce(new PidDrive(12, 12, m_romiDrivetrain));
   }
 
   /**

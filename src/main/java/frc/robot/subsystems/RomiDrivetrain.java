@@ -30,8 +30,10 @@ public class RomiDrivetrain extends SubsystemBase {
   // Set up the differential drive controller
   private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
   private TrapezoidProfile.Constraints Constraints = new TrapezoidProfile.Constraints(15,15);
-  private ProfiledPIDController leftPidController = new ProfiledPIDController(0.357, 0, 0, Constraints);
-  private ProfiledPIDController rightPidController = new ProfiledPIDController(0.357, 0, 0, Constraints);
+  //private ProfiledPIDController leftPidController = new ProfiledPIDController(0.357, 0, 0, Constraints);
+  //private ProfiledPIDController rightPidController = new ProfiledPIDController(0.357, 0, 0, Constraints);
+    private PIDController leftPidController = new PIDController(0.2, 0, 0);
+    private PIDController rightPidController = new PIDController(0.2, 0, 0);
 
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
@@ -91,12 +93,15 @@ public class RomiDrivetrain extends SubsystemBase {
   }
 
   public void SetPidTarget(double TargetLeft_in, double TargetRight_in) {
-    leftPidController.setGoal(TargetLeft_in);
-    rightPidController.setGoal(TargetRight_in);
+    //leftPidController.setGoal(TargetLeft_in);
+    //rightPidController.setGoal(TargetRight_in);
+    leftPidController.setSetpoint(TargetLeft_in);
+    rightPidController.setSetpoint(TargetRight_in);
   }
 
   public boolean TargetReached() {
-    return leftPidController.atSetpoint() && rightPidController.atSetpoint(); // TO DO
+    //return leftPidController.atGoal() && rightPidController.atGoal();
+    return leftPidController.atSetpoint() && rightPidController.atSetpoint();
 
   }
 }

@@ -68,6 +68,21 @@ public class RobotContainer {
     Driver.getButtonLB().whileActiveOnce(new PidDrive(-12, -12, m_romiDrivetrain));
     Driver.getButtonRT().whileActiveOnce(new PidTurn(90, m_romiDrivetrain));
     Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));
+    y.whileActiveOnce(new SequentialCommandGroup(
+      new PidDrive(18, 18, m_romiDrivetrain), 
+      new PidTurn(-90, m_romiDrivetrain),
+      new PidDrive(18, 18, m_romiDrivetrain),
+      new PidTurn(-90, m_romiDrivetrain),
+      new PidDrive(13.5, 13.5, m_romiDrivetrain),
+      new PidTurn(-90, m_romiDrivetrain),
+      new PidDrive(9, 9, m_romiDrivetrain),
+      new PidTurn(90, m_romiDrivetrain),
+      new PidDrive(13.5, 13.5, m_romiDrivetrain),
+      new PidTurn(90, m_romiDrivetrain),
+      new PidDrive(18, 18, m_romiDrivetrain),
+      new PidTurn(90, m_romiDrivetrain),
+      new PidDrive(18, 18, m_romiDrivetrain)
+    ));
 
   }
 

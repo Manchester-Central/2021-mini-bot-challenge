@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.sensors.RomiGyro;
 
 public class RomiDrivetrain extends SubsystemBase {
   private static final double kCountsPerRevolution = 1440.0;
@@ -50,6 +51,8 @@ public class RomiDrivetrain extends SubsystemBase {
   // private PIDController leftPidController = new PIDController(0.2, 0, 0);
   // private PIDController rightPidController = new PIDController(0.2, 0, 0);
 
+  private final RomiGyro m_romiGyro = new RomiGyro();
+
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
     // Use inches as unit for encoder distances
@@ -60,6 +63,7 @@ public class RomiDrivetrain extends SubsystemBase {
     rightPidController.setTolerance(0.1);
     SmartDashboard.putData("leftPID", leftPidController);
     SmartDashboard.putData("rightPID", rightPidController);
+    m_romiGyro.reset();
   }
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
@@ -88,6 +92,9 @@ public class RomiDrivetrain extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Left Inches", getLeftDistanceInch());
     SmartDashboard.putNumber("Right Inches", getRightDistanceInch());
+    SmartDashboard.putNumber("Gyro X", m_romiGyro.getAngleX());
+    SmartDashboard.putNumber("Gyro Y", m_romiGyro.getAngleY());
+    SmartDashboard.putNumber("Gyro Z", m_romiGyro.getAngleZ());
   }
 
   @Override

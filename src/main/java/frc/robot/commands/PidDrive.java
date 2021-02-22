@@ -24,24 +24,28 @@ public class PidDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.SetPidTarget(m_drivetrain.getLeftDistanceInch() + m_distanceTargetLeft_in,
-        m_drivetrain.getRightDistanceInch() + m_distanceTargetRight_in);
+    System.out.println("initialize");
+    m_drivetrain.SetPidTargetDistance(m_distanceTargetLeft_in, m_distanceTargetRight_in);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("execute");
     m_drivetrain.PidDrive();
   }
 
   // Called once the command   ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("end -interrupted? " + interrupted);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("isFinished");
     return m_drivetrain.TargetReached();
   }
 }
+

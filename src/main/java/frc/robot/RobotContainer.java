@@ -14,6 +14,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.PidDrive;
+import frc.robot.commands.PidTurn;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TimedAutoDrive;
 import frc.robot.commands.ToggleLED;
@@ -64,6 +65,10 @@ public class RobotContainer {
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
     Driver.getButtonRB().whileActiveOnce(new PidDrive(12, 12, m_romiDrivetrain));
+    Driver.getButtonLB().whileActiveOnce(new PidDrive(-12, -12, m_romiDrivetrain));
+    Driver.getButtonRT().whileActiveOnce(new PidTurn(90, m_romiDrivetrain));
+    Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));
+
   }
 
   /**

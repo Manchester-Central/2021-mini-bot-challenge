@@ -4,12 +4,18 @@
 
 package frc.robot;
 
+import java.sql.Driver;
+
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.PidDrive;
+import frc.robot.commands.PidGyro;
+import frc.robot.commands.PidTurn;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TimedAutoDrive;
 import frc.robot.commands.ToggleLED;
@@ -57,6 +63,28 @@ public class RobotContainer {
     TimedAutoDrive driveforward = new TimedAutoDrive(3, m_romiDrivetrain, 0.35, 0.35);
     TimedAutoDrive drivebackward = new TimedAutoDrive(3, m_romiDrivetrain, -0.35, -0.35);
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
+    Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
+    Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
+    Driver.getButtonRB().whileActiveOnce(new PidDrive(12, 12, m_romiDrivetrain));
+    Driver.getButtonLB().whileActiveOnce(new PidDrive(-12, -12, m_romiDrivetrain));
+    Driver.getButtonRT().whileActiveOnce(new PidGyro(90, m_romiDrivetrain));
+    Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));
+    y.whileActiveOnce(new SequentialCommandGroup(
+      new PidDrive(17, 17, m_romiDrivetrain), 
+      new PidTurn(-90, m_romiDrivetrain),
+      new PidDrive(17, 17, m_romiDrivetrain),
+      new PidTurn(-90, m_romiDrivetrain),
+      new PidDrive(13.5, 13.5, m_romiDrivetrain),
+      new PidTurn(-90, m_romiDrivetrain),
+      new PidDrive(9, 9, m_romiDrivetrain),
+      new PidTurn(90, m_romiDrivetrain),
+      new PidDrive(13.5, 13.5, m_romiDrivetrain),
+      new PidTurn(90, m_romiDrivetrain),
+      new PidDrive(17, 17, m_romiDrivetrain),
+      new PidTurn(90, m_romiDrivetrain),
+      new PidDrive(17, 17, m_romiDrivetrain)
+    ));
+
   }
 
   /**

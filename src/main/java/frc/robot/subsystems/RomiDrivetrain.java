@@ -6,12 +6,34 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.sensors.RomiGyro;
 
 public class RomiDrivetrain extends SubsystemBase {
   private static final double kCountsPerRevolution = 1440.0;
   private static final double kWheelDiameterInch = 2.75591; // 70 mm
+  private static final double kTrackWidthInch = 5.55;
+  private static final double kTurningCircumferenceInch = kTrackWidthInch * Math.PI;
+
+  // Drive straight PID values
+  private static final double kStraightP = 0.15;
+  private static final double kStraightI = 0.6;
+  private static final double kStraightD = 0;
+  // private static final double kStraightP = 0.3;
+  // private static final double kStraightI = 0;
+  // private static final double kStraightD = 0;
+  private static final TrapezoidProfile.Constraints kStraightConstraints = new TrapezoidProfile.Constraints(8, 10);
+
+  // Drive turn PID values
+  private static final double kTurnP = 0.3;
+  private static final double kTurnI = 0.12;
+  private static final double kTurnD = 0;
+  private static final TrapezoidProfile.Constraints kTurnConstraints = new TrapezoidProfile.Constraints(10, 10);
 
   // The Romi has the left and right motors set to
   // PWM channels 0 and 1 respectively
@@ -25,6 +47,14 @@ public class RomiDrivetrain extends SubsystemBase {
 
   // Set up the differential drive controller
   private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
+  private ProfiledPIDController leftPidController = new ProfiledPIDController(kStraightP, kStraightI, kStraightD,
+      kStraightConstraints);
+  private ProfiledPIDController rightPidController = new ProfiledPIDController(kStraightP, kStraightI, kStraightD,
+      kStraightConstraints);
+  // private PIDController leftPidController = new PIDController(0.2, 0, 0);
+  // private PIDController rightPidController = new PIDController(0.2, 0, 0);
+
+  private final RomiGyro m_romiGyro = new RomiGyro();
 
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
@@ -32,6 +62,11 @@ public class RomiDrivetrain extends SubsystemBase {
     m_leftEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
     m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
     resetEncoders();
+    leftPidController.setTolerance(0.1);
+    rightPidController.setTolerance(0.1);
+    SmartDashboard.putData("leftPID", leftPidController);
+    SmartDashboard.putData("rightPID", rightPidController);
+    m_romiGyro.reset();
   }
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
@@ -40,6 +75,10 @@ public class RomiDrivetrain extends SubsystemBase {
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate, boolean smoothing) {
     m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate, smoothing);
+  }
+
+  public double getAngle() {
+    return m_romiGyro.getAngleZ();
   }
 
   public void resetEncoders() {
@@ -58,6 +97,12 @@ public class RomiDrivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Left Inches", getLeftDistanceInch());
+    SmartDashboard.putNumber("Right Inches", getRightDistanceInch());
+    SmartDashboard.putNumber("Gyro X", m_romiGyro.getAngleX());
+    SmartDashboard.putNumber("Gyro Y", m_romiGyro.getAngleY());
+    SmartDashboard.putNumber("Gyro Z", m_romiGyro.getAngleZ());
+    // m_romiGyro.
   }
 
   @Override
@@ -66,10 +111,52 @@ public class RomiDrivetrain extends SubsystemBase {
   }
 
   public void TankDrive(double leftPower, double rightPower) {
-   TankDrive(leftPower, rightPower, false);
+    TankDrive(leftPower, rightPower, false);
   }
 
   public void TankDrive(double leftPower, double rightPower, boolean smoothing) {
     m_diffDrive.tankDrive(leftPower, rightPower, smoothing);
+  }
+
+  public void PidDrive() {
+    double PowerLeft = leftPidController.calculate(getLeftDistanceInch());
+    double PowerRight = rightPidController.calculate(getRightDistanceInch());
+    TankDrive(PowerLeft, PowerRight);
+    SmartDashboard.putNumber("PowerLeft", PowerLeft);
+    SmartDashboard.putNumber("PowerRight", PowerRight);
+  }
+
+  private void SetPidTarget(double TargetLeft_in, double TargetRight_in) {
+    leftPidController.reset(getLeftDistanceInch());
+    rightPidController.reset(getRightDistanceInch());
+
+    leftPidController.setGoal(TargetLeft_in);
+    rightPidController.setGoal(TargetRight_in);
+    // leftPidController.setSetpoint(TargetLeft_in);
+    // rightPidController.setSetpoint(TargetRight_in);
+  }
+
+  public void SetPidTargetDistance(double TargetLeft_in, double TargetRight_in) {
+    leftPidController.setPID(kStraightP, kStraightI, kStraightD);
+    rightPidController.setPID(kStraightP, kStraightI, kStraightD);
+    leftPidController.setConstraints(kStraightConstraints);
+    rightPidController.setConstraints(kStraightConstraints);
+    SetPidTarget(getLeftDistanceInch() + TargetLeft_in, getRightDistanceInch() + TargetRight_in);
+  }
+
+  public void SetPidTargetAngle(double TargetAngle) {
+    leftPidController.setPID(kTurnP, kTurnI, kTurnD);
+    rightPidController.setPID(kTurnP, kTurnI, kTurnD);
+    leftPidController.setConstraints(kTurnConstraints);
+    rightPidController.setConstraints(kTurnConstraints);
+    double deltaDistance = (TargetAngle / 360) * kTurningCircumferenceInch;
+    SetPidTarget(getLeftDistanceInch() + deltaDistance, getRightDistanceInch() - deltaDistance);
+
+  }
+
+  public boolean TargetReached() {
+    return leftPidController.atGoal() && rightPidController.atGoal();
+    // return leftPidController.atSetpoint() && rightPidController.atSetpoint();
+
   }
 }

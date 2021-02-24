@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ArcDrive;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.ExampleCommand;
@@ -18,6 +19,7 @@ import frc.robot.commands.PidTurn;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TimedAutoDrive;
 import frc.robot.commands.ToggleLED;
+import frc.robot.commands.ArcDrive.Direction;
 import frc.robot.gamepads.Gamepad;
 import frc.robot.subsystems.RomiDrivetrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -53,9 +55,9 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
+    m_romiDrivetrain.setDefaultCommand(new ArcadeDrive(Driver, m_romiDrivetrain));
     Driver.getButtonA().whenPressed(new ToggleLED(greenLed));
-    Driver.getButtonX().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
+    Driver.getButtonX().toggleWhenPressed(new TankDrive(Driver, m_romiDrivetrain));
     Button b = Driver.getButtonB();
     b.whenPressed(new TimedAutoDrive(4, m_romiDrivetrain, 0.35, 0.351));
     Button y = Driver.getButtonY();
@@ -63,7 +65,6 @@ public class RobotContainer {
     TimedAutoDrive drivebackward = new TimedAutoDrive(3, m_romiDrivetrain, -0.35, -0.35);
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
-    Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
     Driver.getButtonRB().whileActiveOnce(new PidDrive(12, 12, m_romiDrivetrain));
     Driver.getButtonLB().whileActiveOnce(new PidDrive(-12, -12, m_romiDrivetrain));
     Driver.getButtonRT().whileActiveOnce(new PidTurn(90, m_romiDrivetrain));
@@ -82,6 +83,15 @@ public class RobotContainer {
       new PidDrive(17, 17, m_romiDrivetrain),
       new PidTurn(90, m_romiDrivetrain),
       new PidDrive(17, 17, m_romiDrivetrain)
+    ));
+    Driver.getButtonSelect().whileActiveOnce(new SequentialCommandGroup(
+      new DistanceAutoDrive(4.3, m_romiDrivetrain),
+      new ArcDrive(13.303, 20.897, Direction.Left, m_romiDrivetrain),
+      new ArcDrive(5.5, 8.8, Direction.Left, m_romiDrivetrain),
+      new DistanceAutoDrive(13, m_romiDrivetrain),
+      new ArcDrive(5.5, 8.8, Direction.Right, m_romiDrivetrain),
+      new ArcDrive(13.303, 19.4, Direction.Right, m_romiDrivetrain),
+      new DistanceAutoDrive(6.5, m_romiDrivetrain)
     ));
   }
 

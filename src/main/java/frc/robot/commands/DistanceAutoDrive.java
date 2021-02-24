@@ -29,7 +29,7 @@ public class DistanceAutoDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.TankDrive(1,1);
+    m_drivetrain.TankDrive(0.3, 0.3 * 0.96);
   }
 
   // Called once the command ends or is interrupted.

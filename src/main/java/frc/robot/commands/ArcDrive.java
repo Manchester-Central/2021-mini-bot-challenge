@@ -9,14 +9,32 @@ import frc.robot.subsystems.RomiDrivetrain;
 
 public class ArcDrive extends CommandBase {
 
+  public enum Direction {
+    Left, Right
+  }
+
+  private double kDefaultSpeed = 0.5;
   private RomiDrivetrain m_drivetrain;
-  private double m_distanceTarget_in;
+  private double m_arcLength_in;
+  private double m_leftPower;
+  private double m_rightPower;
 
   /** Creates a new DistanceAutoDrive. */
-  public ArcDrive(double distanceTarget_in, RomiDrivetrain drivetrain) {
+  public ArcDrive(double turningRadius, double arcLength, Direction direction, RomiDrivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
+
     m_drivetrain = drivetrain;
-    m_distanceTarget_in = distanceTarget_in;
+    m_arcLength_in = arcLength;
+    double romiRadius = RomiDrivetrain.kTrackWidthInch / 2;
+    double outerRadius = (turningRadius + romiRadius);
+    double innerRadius = (turningRadius - romiRadius);
+    if (direction == Direction.Left) {
+      m_leftPower = (innerRadius / outerRadius) * kDefaultSpeed;
+      m_rightPower = kDefaultSpeed;
+    } else {
+      m_leftPower = kDefaultSpeed;
+      m_rightPower = (innerRadius / outerRadius) * kDefaultSpeed;
+    }
     addRequirements(drivetrain);
   }
 
@@ -29,18 +47,21 @@ public class ArcDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.TankDrive(1,1);
+    m_drivetrain.TankDrive(m_leftPower, m_rightPower * 0.96);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.TankDrive(0,0);
+    m_drivetrain.TankDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrain.getLeftDistanceInch() > m_distanceTarget_in;
+    double leftDistance = m_drivetrain.getLeftDistanceInch();
+    double rightDistance = m_drivetrain.getRightDistanceInch();
+    double middleDistance = (leftDistance + rightDistance) / 2;
+    return middleDistance > m_arcLength_in;
   }
 }

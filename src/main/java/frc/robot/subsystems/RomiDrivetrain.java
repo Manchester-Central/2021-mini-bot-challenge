@@ -24,6 +24,9 @@ public class RomiDrivetrain extends SubsystemBase {
   private static final double kStraightP = 0.15;
   private static final double kStraightI = 0.6;
   private static final double kStraightD = 0;
+  // private static final double kStraightP = 0.3;
+  // private static final double kStraightI = 0;
+  // private static final double kStraightD = 0;
   private static final TrapezoidProfile.Constraints kStraightConstraints = new TrapezoidProfile.Constraints(8, 10);
 
   // Drive turn PID values
@@ -74,6 +77,10 @@ public class RomiDrivetrain extends SubsystemBase {
     m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate, smoothing);
   }
 
+  public double getAngle() {
+    return m_romiGyro.getAngleZ();
+  }
+
   public void resetEncoders() {
     m_leftEncoder.reset();
     m_rightEncoder.reset();
@@ -95,6 +102,7 @@ public class RomiDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Gyro X", m_romiGyro.getAngleX());
     SmartDashboard.putNumber("Gyro Y", m_romiGyro.getAngleY());
     SmartDashboard.putNumber("Gyro Z", m_romiGyro.getAngleZ());
+    // m_romiGyro.
   }
 
   @Override

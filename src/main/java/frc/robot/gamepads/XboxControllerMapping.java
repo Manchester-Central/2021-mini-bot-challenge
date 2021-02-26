@@ -18,7 +18,7 @@ public class XboxControllerMapping implements IControllerMapping {
     }
 
     public double getLeftY(Joystick joystick) {
-        return joystick.getRawAxis(1);
+        return -joystick.getRawAxis(1);
     }
 
     public double getRightX(Joystick joystick) {
@@ -26,7 +26,7 @@ public class XboxControllerMapping implements IControllerMapping {
     }
 
     public double getRightY(Joystick joystick) {
-        return joystick.getRawAxis(3);
+        return -joystick.getRawAxis(3);
     }
 
     public boolean getButtonPressed(Joystick joystick, ButtonType buttonType) {

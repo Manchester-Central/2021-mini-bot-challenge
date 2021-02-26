@@ -15,10 +15,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.RomiGyro;
 
 public class RomiDrivetrain extends SubsystemBase {
-  public static final double kTrackWidthInch = 5.55;
-
   private static final double kCountsPerRevolution = 1440.0;
   private static final double kWheelDiameterInch = 2.75591; // 70 mm
+  private static final double kTrackWidthInch = 5.55;
   private static final double kTurningCircumferenceInch = kTrackWidthInch * Math.PI;
 
   // Drive straight PID values

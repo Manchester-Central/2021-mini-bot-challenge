@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.ArcDrive;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.ExampleCommand;
@@ -59,15 +58,7 @@ public class RobotContainer {
     Driver.getButtonA().whenPressed(new ToggleLED(greenLed));
     Driver.getButtonX().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
     Button b = Driver.getButtonB();
-    b.whileActiveOnce(new SequentialCommandGroup(
-      new DistanceAutoDrive(4.303, m_romiDrivetrain),
-      new ArcDrive(13.303, 20.897, true, m_romiDrivetrain),
-      new ArcDrive(5.5, 8, true, m_romiDrivetrain),
-      new DistanceAutoDrive(10.85, m_romiDrivetrain),
-      new ArcDrive(5.5, 10.4, false, m_romiDrivetrain),
-      new ArcDrive(13.303, 21, false, m_romiDrivetrain),
-      new DistanceAutoDrive(4.303, m_romiDrivetrain)
-    ));
+    b.whenPressed(new TimedAutoDrive(4, m_romiDrivetrain, 0.35, 0.351));
     Button y = Driver.getButtonY();
     TimedAutoDrive driveforward = new TimedAutoDrive(3, m_romiDrivetrain, 0.35, 0.35);
     TimedAutoDrive drivebackward = new TimedAutoDrive(3, m_romiDrivetrain, -0.35, -0.35);

@@ -5,7 +5,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.data.Direction;
 import frc.robot.subsystems.RomiDrivetrain;
 
@@ -16,11 +18,18 @@ public class ArcDriveVelocity extends CommandBase {
   private double m_arcLength_in;
   private double m_leftTargetSpeed;
   private double m_rightTargetSpeed;
-  private double m_leftPower = 0;
-  private double m_rightPower = 0;
+  private static double m_leftPower = 0;
+  private static double m_rightPower = 0;
 
-  private PIDController m_pidVelocityLeft = new PIDController(0.0025, 0.001, 0);
-  private PIDController m_pidVelocityRight = new PIDController(0.0025, 0.001, 0);
+  private PIDController m_pidVelocityLeft = new PIDController(0.0035, 0.002, 0);
+  private PIDController m_pidVelocityRight = new PIDController(0.0035, 0.002, 0);
+
+  public static Command GetResetCommand() {
+    return new InstantCommand(() -> {
+      m_leftPower = 0;
+      m_rightPower = 0;
+    });
+  };
 
   /** Creates a new DistanceAutoDrive. */
   public ArcDriveVelocity(double turningRadius, double arcLength, Direction direction, RomiDrivetrain drivetrain) {
@@ -34,7 +43,7 @@ public class ArcDriveVelocity extends CommandBase {
     if (direction == Direction.Left) {
       m_leftTargetSpeed = (innerRadius / outerRadius) * kDefaultSpeed;
       m_rightTargetSpeed = kDefaultSpeed;
-    } else if(direction == Direction.Right) {
+    } else if (direction == Direction.Right) {
       m_leftTargetSpeed = kDefaultSpeed;
       m_rightTargetSpeed = (innerRadius / outerRadius) * kDefaultSpeed;
     } else {
@@ -54,6 +63,11 @@ public class ArcDriveVelocity extends CommandBase {
   @Override
   public void initialize() {
     m_drivetrain.resetEncoders();
+    // var average = (m_leftPower + m_rightPower) / 2;
+    // m_leftPower = average;
+    // m_rightPower = average;
+    // m_leftPower = 0.2;
+    // m_rightPower = 0.2;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -67,7 +81,7 @@ public class ArcDriveVelocity extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.TankDrive(0, 0);
+    // m_drivetrain.TankDrive(0, 0);
   }
 
   // Returns true when the command should end.

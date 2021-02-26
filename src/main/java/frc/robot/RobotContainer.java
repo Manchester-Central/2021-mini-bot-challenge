@@ -90,22 +90,24 @@ public class RobotContainer {
       new DistanceAutoDrive(4.3, m_romiDrivetrain)
     ));
     Driver.getButtonB().whileActiveOnce(new SequentialCommandGroup(
-      new DistanceAutoDrive(4.3, m_romiDrivetrain),
-      new ArcDriveVelocity(13.303, 20.0, Direction.Left, m_romiDrivetrain),
-      new ArcDriveVelocity(4.3, 8.0, Direction.Left, m_romiDrivetrain),
-      new DistanceAutoDrive(15.809, m_romiDrivetrain),
-      new ArcDriveVelocity(4.3, 8.0, Direction.Right, m_romiDrivetrain),
-      new ArcDriveVelocity(13.303, 20.0, Direction.Right, m_romiDrivetrain),
-      new DistanceAutoDrive(4.3, m_romiDrivetrain)
+      ArcDriveVelocity.GetResetCommand(),
+      new ArcDriveVelocity(4.3, m_romiDrivetrain),
+      new ArcDriveVelocity(13.303, 20.897, Direction.Left, m_romiDrivetrain),
+      new ArcDriveVelocity(4.3, 8.9, Direction.Left, m_romiDrivetrain),
+      new ArcDriveVelocity(15.809, m_romiDrivetrain),
+      new ArcDriveVelocity(4.3, 8.9, Direction.Right, m_romiDrivetrain),
+      new ArcDriveVelocity(13.303, 20.897, Direction.Right, m_romiDrivetrain),
+      new ArcDriveVelocity(4.3, m_romiDrivetrain)
     ));
     Driver.getButtonA().whileActiveOnce(new SequentialCommandGroup(
-      new DistanceAutoDrive(4.3, m_romiDrivetrain),
+      ArcDriveVelocity.GetResetCommand(),
+      new ArcDriveVelocity(4.3, m_romiDrivetrain),
       new ArcDriveVelocity(13.303, 20.897, Direction.Left, m_romiDrivetrain),
       new ArcDriveVelocity(5.5, 8.8, Direction.Left, m_romiDrivetrain),
-      new DistanceAutoDrive(13, m_romiDrivetrain),
+      new ArcDriveVelocity(13, m_romiDrivetrain),
       new ArcDriveVelocity(5.5, 8.8, Direction.Right, m_romiDrivetrain),
       new ArcDriveVelocity(13.303, 19.4, Direction.Right, m_romiDrivetrain),
-      new DistanceAutoDrive(6.5, m_romiDrivetrain)
+      new ArcDriveVelocity(6.5, m_romiDrivetrain)
     ));
   }
 

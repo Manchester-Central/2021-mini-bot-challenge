@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.RomiDrivetrain;
 
@@ -13,12 +14,13 @@ public class AutoCorrectedDrive extends CommandBase {
   private double m_rightTarget_in;
   private double m_leftPower, m_rightPower;
 
-  private final double kForwardGain = 0.09;
-  private final double kTurnGain = 0.5;
+  private final double kForwardGain = 0.13;
+  private final double kTurnGain = 0.2;
   private final double kMinPower = 0.1;
   private final double kMaxPower = 1.0;
-  private final double kMaxPowerChange = 0.012;
-  private final double kTolerance_in = 0.07;
+  private final double kMaxPowerChange = 0.009;
+  private final double kTolerance_in = 0.05;
+
 
   private RomiDrivetrain m_drivetrain;
 
@@ -65,6 +67,7 @@ public class AutoCorrectedDrive extends CommandBase {
   public void execute() {
     // Get the travelled distance for the middle of the robot.
     double arcTravelled_in = getArcTravelledInch();
+    SmartDashboard.putNumber("Distance to go", m_middleTarget_in - arcTravelled_in);
 
     //Calculate the error and error percent for the target.
     double leftError_in = m_leftTarget_in - m_drivetrain.getLeftDistanceInch();

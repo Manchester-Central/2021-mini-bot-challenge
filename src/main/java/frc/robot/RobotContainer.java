@@ -36,13 +36,13 @@ public class RobotContainer {
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   public Gamepad Driver = new Gamepad(0, "Driver");
   private final Command m_autoCommand = new SequentialCommandGroup(
-    new AutoCorrectedDrive(4.303, m_romiDrivetrain),
+    new AutoCorrectedDrive(6.803, m_romiDrivetrain),
     new AutoCorrectedDrive(13.303, 20.897, true, m_romiDrivetrain),
-    new AutoCorrectedDrive(4.303, 8.905, true, m_romiDrivetrain),
-    new AutoCorrectedDrive(15.809, m_romiDrivetrain),
+    new AutoCorrectedDrive(4.303, 8.205, true, m_romiDrivetrain),
+    new AutoCorrectedDrive(17.309, m_romiDrivetrain),
     new AutoCorrectedDrive(4.303, 8.905, false, m_romiDrivetrain),
     new AutoCorrectedDrive(13.303, 20.987, false, m_romiDrivetrain),
-    new AutoCorrectedDrive(3.803, m_romiDrivetrain)
+    new AutoCorrectedDrive(1, m_romiDrivetrain)
   );
 
   /**

@@ -39,10 +39,10 @@ public class RobotContainer {
     new AutoCorrectedDrive(6.803, m_romiDrivetrain),
     new AutoCorrectedDrive(13.303, 20.897, true, m_romiDrivetrain),
     new AutoCorrectedDrive(4.303, 8.205, true, m_romiDrivetrain),
-    new AutoCorrectedDrive(17.309, m_romiDrivetrain),
+    new AutoCorrectedDrive(17.709, m_romiDrivetrain),
     new AutoCorrectedDrive(4.303, 8.905, false, m_romiDrivetrain),
-    new AutoCorrectedDrive(13.303, 20.987, false, m_romiDrivetrain),
-    new AutoCorrectedDrive(1, m_romiDrivetrain)
+    new AutoCorrectedDrive(13.850, 20.987, false, m_romiDrivetrain),
+    new AutoCorrectedDrive(2.5, m_romiDrivetrain)
   );
 
   /**

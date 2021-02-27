@@ -18,6 +18,7 @@ public class AutoCorrectedDrive extends CommandBase {
   private final double kMinPower = 0.1;
   private final double kMaxPower = 0.3;
   private final double kMaxPowerChange = 0.015;
+  private final double kTolerance_in = 0.05;
 
   private RomiDrivetrain m_drivetrain;
 
@@ -72,7 +73,7 @@ public class AutoCorrectedDrive extends CommandBase {
     double rightErrorScaled = rightError_in / m_rightTarget_in;
 
     //Determine how far the left or right is off from the given arc.
-    double turnError = (leftErrorScaled - rightErrorScaled) * m_middleTarget_in;
+    double turnError = (leftErrorScaled - rightErrorScaled) * (m_middleTarget_in - arcTravelled_in);
 
     //Outputs are determined by distance from the target and turn error (multiplied by gains).
     double leftOutput = (leftError_in * kForwardGain) + (turnError * kTurnGain);
@@ -148,7 +149,7 @@ public class AutoCorrectedDrive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return getArcTravelledInch() > m_middleTarget_in;
+    return getArcTravelledInch() >= m_middleTarget_in - kTolerance_in;
   }
 
   private double getArcTravelledInch() {

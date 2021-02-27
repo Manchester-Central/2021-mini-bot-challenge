@@ -36,7 +36,15 @@ public class RobotContainer {
   private DigitalOutput greenLed = new DigitalOutput(1);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   public Gamepad Driver = new Gamepad(0, "Driver");
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
+  private final Command m_autoCommand = new SequentialCommandGroup(
+    new AutoCorrectedDrive(4.303, m_romiDrivetrain),
+    new AutoCorrectedDrive(13.303, 20.897, true, m_romiDrivetrain),
+    new AutoCorrectedDrive(4.303, 8.905, true, m_romiDrivetrain),
+    new AutoCorrectedDrive(15.809, m_romiDrivetrain),
+    new AutoCorrectedDrive(4.303, 8.905, false, m_romiDrivetrain),
+    new AutoCorrectedDrive(13.303, 20.987, false, m_romiDrivetrain),
+    new AutoCorrectedDrive(4.303, m_romiDrivetrain)
+  );
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -72,15 +80,7 @@ public class RobotContainer {
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
-    Driver.getButtonRB().whileActiveOnce(new SequentialCommandGroup(
-      new AutoCorrectedDrive(4.303, m_romiDrivetrain),
-      new AutoCorrectedDrive(13.303, 20.897, true, m_romiDrivetrain),
-      new AutoCorrectedDrive(4.303, 8.905, true, m_romiDrivetrain),
-      new AutoCorrectedDrive(15.809, m_romiDrivetrain),
-      new AutoCorrectedDrive(4.303, 8.905, false, m_romiDrivetrain),
-      new AutoCorrectedDrive(13.303, 20.987, false, m_romiDrivetrain),
-      new AutoCorrectedDrive(4.303, m_romiDrivetrain)
-    ));
+    Driver.getButtonRB().whileActiveOnce(m_autoCommand);
     Driver.getButtonLB().whileActiveOnce(new PidDrive(-12, -12, m_romiDrivetrain));
     Driver.getButtonRT().whileActiveOnce(new PidGyro(90, m_romiDrivetrain));
     Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));

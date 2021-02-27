@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.sql.Driver;
-
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -35,7 +33,6 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DigitalOutput greenLed = new DigitalOutput(1);
-  private DigitalOutput redLed = new DigitalOutput(2);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   public Gamepad Driver = new Gamepad(0, "Driver");
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);

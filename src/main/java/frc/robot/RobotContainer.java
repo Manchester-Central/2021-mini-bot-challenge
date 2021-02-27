@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArcDrive;
+import frc.robot.commands.CorrectedDrive;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.ExampleCommand;
@@ -58,20 +59,29 @@ public class RobotContainer {
     m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
     Driver.getButtonA().whenPressed(new ToggleLED(greenLed));
     Driver.getButtonX().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
-    Button b = Driver.getButtonB();
-    b.whileActiveOnce(new SequentialCommandGroup(
-      new DistanceAutoDrive(4.303, m_romiDrivetrain),
-      new ArcDrive(13.303, 20.897, true, m_romiDrivetrain),
-      new ArcDrive(5.5, 8, true, m_romiDrivetrain),
-      new DistanceAutoDrive(10.85, m_romiDrivetrain),
-      new ArcDrive(5.5, 10.4, false, m_romiDrivetrain),
-      new ArcDrive(13.303, 21, false, m_romiDrivetrain),
-      new DistanceAutoDrive(4.303, m_romiDrivetrain)
+    // Button b = Driver.getButtonB();
+    // b.whileActiveOnce(new SequentialCommandGroup(
+    //   new DistanceAutoDrive(4.303, m_romiDrivetrain),
+    //   new ArcDrive(13.303, 20.897, true, m_romiDrivetrain),
+    //   new ArcDrive(5.5, 8, true, m_romiDrivetrain),
+    //   new DistanceAutoDrive(10.85, m_romiDrivetrain),
+    //   new ArcDrive(5.5, 10.4, false, m_romiDrivetrain),
+    //   new ArcDrive(13.303, 21, false, m_romiDrivetrain),
+    //   new DistanceAutoDrive(4.303, m_romiDrivetrain)
+    // ));
+    Driver.getButtonB().whileActiveOnce(new SequentialCommandGroup(
+        new CorrectedDrive(4.303, m_romiDrivetrain),
+        new CorrectedDrive(13.303, 20.897, true, m_romiDrivetrain),
+        new CorrectedDrive(4.303, 8.905, true, m_romiDrivetrain),
+        new CorrectedDrive(15.809, m_romiDrivetrain),
+        new CorrectedDrive(4.303, 8.905, false, m_romiDrivetrain),
+        new CorrectedDrive(13.303, 20.897, false, m_romiDrivetrain),
+        new CorrectedDrive(4.303, m_romiDrivetrain)
     ));
     Button y = Driver.getButtonY();
     TimedAutoDrive driveforward = new TimedAutoDrive(3, m_romiDrivetrain, 0.35, 0.35);
     TimedAutoDrive drivebackward = new TimedAutoDrive(3, m_romiDrivetrain, -0.35, -0.35);
-    y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
+    //y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
     Driver.getButtonRB().whileActiveOnce(new PidDrive(12, 12, m_romiDrivetrain));

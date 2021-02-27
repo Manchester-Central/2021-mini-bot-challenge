@@ -14,11 +14,11 @@ public class AutoCorrectedDrive extends CommandBase {
   private double m_leftPower, m_rightPower;
 
   private final double kForwardGain = 0.09;
-  private final double kTurnGain = 0.3;
+  private final double kTurnGain = 0.5;
   private final double kMinPower = 0.1;
-  private final double kMaxPower = 0.3;
-  private final double kMaxPowerChange = 0.015;
-  private final double kTolerance_in = 0.05;
+  private final double kMaxPower = 1.0;
+  private final double kMaxPowerChange = 0.012;
+  private final double kTolerance_in = 0.07;
 
   private RomiDrivetrain m_drivetrain;
 

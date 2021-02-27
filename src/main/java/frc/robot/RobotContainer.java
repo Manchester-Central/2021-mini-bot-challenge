@@ -12,7 +12,6 @@ import frc.robot.commands.ArcDrive;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutoCorrectedDrive;
 import frc.robot.commands.DistanceAutoDrive;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.PidDrive;
 import frc.robot.commands.PidGyro;
 import frc.robot.commands.PidTurn;
@@ -43,7 +42,7 @@ public class RobotContainer {
     new AutoCorrectedDrive(15.809, m_romiDrivetrain),
     new AutoCorrectedDrive(4.303, 8.905, false, m_romiDrivetrain),
     new AutoCorrectedDrive(13.303, 20.987, false, m_romiDrivetrain),
-    new AutoCorrectedDrive(4.303, m_romiDrivetrain)
+    new AutoCorrectedDrive(3.803, m_romiDrivetrain)
   );
 
   /**

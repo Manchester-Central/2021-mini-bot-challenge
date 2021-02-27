@@ -75,8 +75,8 @@ public class AutoCorrectedDrive extends CommandBase {
     double turnError = (leftErrorScaled - rightErrorScaled) * m_middleTarget_in;
 
     //Outputs are determined by distance from the target and turn error (multiplied by gains).
-    double leftOutput = (leftError_in * kForwardGain) - (turnError * kTurnGain);
-    double rightOutput = (rightError_in * kForwardGain) + (turnError * kTurnGain);
+    double leftOutput = (leftError_in * kForwardGain) + (turnError * kTurnGain);
+    double rightOutput = (rightError_in * kForwardGain) - (turnError * kTurnGain);
 
     //Gets the absolute value for the outputs.
     double absLeftOutput = Math.abs(leftOutput);

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArcDrive;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutoCorrectedDrive;
 import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.PidDrive;
@@ -71,7 +72,15 @@ public class RobotContainer {
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
-    Driver.getButtonRB().whileActiveOnce(new PidDrive(12, 12, m_romiDrivetrain));
+    Driver.getButtonRB().whileActiveOnce(new SequentialCommandGroup(
+      new AutoCorrectedDrive(4.303, m_romiDrivetrain),
+      new AutoCorrectedDrive(13.303, 20.897, true, m_romiDrivetrain),
+      new AutoCorrectedDrive(4.303, 8.905, true, m_romiDrivetrain),
+      new AutoCorrectedDrive(15.809, m_romiDrivetrain),
+      new AutoCorrectedDrive(4.303, 8.905, false, m_romiDrivetrain),
+      new AutoCorrectedDrive(13.303, 20.987, false, m_romiDrivetrain),
+      new AutoCorrectedDrive(4.303, m_romiDrivetrain)
+    ));
     Driver.getButtonLB().whileActiveOnce(new PidDrive(-12, -12, m_romiDrivetrain));
     Driver.getButtonRT().whileActiveOnce(new PidGyro(90, m_romiDrivetrain));
     Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));

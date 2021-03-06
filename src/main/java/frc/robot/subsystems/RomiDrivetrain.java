@@ -4,10 +4,16 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BiConsumer;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -55,6 +61,7 @@ public class RomiDrivetrain extends SubsystemBase {
   // private PIDController rightPidController = new PIDController(0.2, 0, 0);
 
   private final RomiGyro m_romiGyro = new RomiGyro();
+  private final DifferentialDriveOdometry m_odometry;
 
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
@@ -67,6 +74,7 @@ public class RomiDrivetrain extends SubsystemBase {
     SmartDashboard.putData("leftPID", leftPidController);
     SmartDashboard.putData("rightPID", rightPidController);
     m_romiGyro.reset();
+    m_odometry = new DifferentialDriveOdometry(m_romiGyro.getRotation2d());
   }
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
@@ -102,6 +110,8 @@ public class RomiDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Gyro X", m_romiGyro.getAngleX());
     SmartDashboard.putNumber("Gyro Y", m_romiGyro.getAngleY());
     SmartDashboard.putNumber("Gyro Z", m_romiGyro.getAngleZ());
+
+    m_odometry.update(m_romiGyro.getRotation2d(), getLeftDistanceInch(), getRightDistanceInch());
     // m_romiGyro.
   }
 
@@ -158,5 +168,25 @@ public class RomiDrivetrain extends SubsystemBase {
     return leftPidController.atGoal() && rightPidController.atGoal();
     // return leftPidController.atSetpoint() && rightPidController.atSetpoint();
 
+  }
+
+  public Pose2d getPose2d() {
+    // returns values in inches
+    return m_odometry.getPoseMeters();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    m_leftMotor.setVoltage(leftVolts);
+    m_rightMotor.setVoltage(-rightVolts);
+    m_diffDrive.feed();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(pose, m_romiGyro.getRotation2d());
   }
 }

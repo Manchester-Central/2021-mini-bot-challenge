@@ -14,13 +14,14 @@ package frc.robot;
  */
 public final class Constants {
 
-    public static final double kRamseteB = 78.74;
-    public static final double kRamseteZeta = 27.6;
+    public static final double kRamseteB = 2.0;
+    public static final double kRamseteZeta = 0.7;
     
-    //TODO Figure out voltage
+    // TODO: Figure out values.
+    // Values currently shameless stolen from Team #195: https://github.com/frcteam195/MiniBot2021/blob/af77ab203140e34cfb80d830527c5bf72cb8ecf0/src/main/java/frc/robot/Constants.java#L20
     public static final double ksVolts = 0.929; 
-    public static final double kvVoltSecondsPerInch = 0.1608;
-    public static final double kaVoltSecondsSquaredPerInch = 0.0009881;
+    public static final double kvVoltSecondsPerMeter = 6.33;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.0389;
 
     public static final double kRamseteP = 0.085;
     public static final double kRamseteI = 0;

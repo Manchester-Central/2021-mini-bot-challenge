@@ -14,16 +14,20 @@ package frc.robot;
  */
 public final class Constants {
 
-    public static final double kRamseteB = 78.74;
-    public static final double kRamseteZeta = 27.6;
+    public static final double kRamseteB = 2.0;
+    public static final double kRamseteZeta = 0.7;
     
     //TODO Figure out voltage
     public static final double ksVolts = 0.929; 
-    public static final double kvVoltSecondsPerInch = 0.1608;
-    public static final double kaVoltSecondsSquaredPerInch = 0.0009881;
+    public static final double kvVoltSecondsPerMeter = 6.33;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.0389;
 
     public static final double kRamseteP = 0.085;
     public static final double kRamseteI = 0;
     public static final double kRamseteD = 0;
+    
+    public static final double kInchPerMeter = 39.3701;
+    public static final double kTrackWidthInch = 5.55;
+    public static final double kTrackWidthMeter = 0.14097;
 
 }

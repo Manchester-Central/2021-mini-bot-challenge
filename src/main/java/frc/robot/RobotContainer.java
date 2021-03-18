@@ -34,7 +34,7 @@ public class RobotContainer {
   private DigitalOutput greenLed = new DigitalOutput(1);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   public Gamepad Driver = new Gamepad(0, "Driver");
-  private final Command m_autoCommand = new PathDrive("AutoPath", m_romiDrivetrain);
+  private final Command m_autoCommand = new PathDrive("Course1", m_romiDrivetrain);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

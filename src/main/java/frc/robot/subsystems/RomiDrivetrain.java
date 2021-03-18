@@ -17,14 +17,14 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.sensors.RomiGyro;
 
 public class RomiDrivetrain extends SubsystemBase {
-  public static final double kTrackWidthInch = 5.55;
 
   private static final double kCountsPerRevolution = 1440.0;
-  private static final double kWheelDiameterInch = 2.75591; // 70 mm
-  private static final double kTurningCircumferenceInch = kTrackWidthInch * Math.PI;
+  private static final double kWheelDiameterMeter = 0.07;
+  private static final double kTurningCircumferenceInch = Constants.kTrackWidthInch * Math.PI;
 
   // Drive straight PID values
   private static final double kStraightP = 0.15;
@@ -66,8 +66,8 @@ public class RomiDrivetrain extends SubsystemBase {
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
     // Use inches as unit for encoder distances
-    m_leftEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
-    m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
+    m_leftEncoder.setDistancePerPulse((Math.PI * kWheelDiameterMeter) / kCountsPerRevolution);
+    m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterMeter) / kCountsPerRevolution);
     resetEncoders();
     leftPidController.setTolerance(0.1);
     rightPidController.setTolerance(0.1);
@@ -95,12 +95,20 @@ public class RomiDrivetrain extends SubsystemBase {
   }
 
   public double getLeftDistanceInch() {
-    return m_leftEncoder.getDistance();
+    return m_leftEncoder.getDistance() * Constants.kInchPerMeter;
   }
 
   public double getRightDistanceInch() {
+    return m_rightEncoder.getDistance() * Constants.kInchPerMeter;
+  }
+  public double getLeftDistanceMeter() {
+    return m_leftEncoder.getDistance();
+  }
+
+  public double getRightDistanceMeter() {
     return m_rightEncoder.getDistance();
   }
+
 
   @Override
   public void periodic() {
@@ -111,7 +119,7 @@ public class RomiDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Y", m_romiGyro.getAngleY());
     SmartDashboard.putNumber("Gyro Z", m_romiGyro.getAngleZ());
 
-    m_odometry.update(m_romiGyro.getRotation2d(), getLeftDistanceInch(), getRightDistanceInch());
+    m_odometry.update(m_romiGyro.getRotation2d(), getLeftDistanceMeter(), getRightDistanceMeter());
     // m_romiGyro.
   }
 

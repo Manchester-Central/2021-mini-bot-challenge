@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Transform2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -63,6 +66,8 @@ public class RomiDrivetrain extends SubsystemBase {
   private final RomiGyro m_romiGyro = new RomiGyro();
   private final DifferentialDriveOdometry m_odometry;
 
+  private final Field2d m_field2d = new Field2d();
+
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
     // Use inches as unit for encoder distances
@@ -75,6 +80,7 @@ public class RomiDrivetrain extends SubsystemBase {
     SmartDashboard.putData("rightPID", rightPidController);
     m_romiGyro.reset();
     m_odometry = new DifferentialDriveOdometry(m_romiGyro.getRotation2d());
+    SmartDashboard.putData("Field2d", m_field2d);
   }
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
@@ -121,6 +127,17 @@ public class RomiDrivetrain extends SubsystemBase {
 
     m_odometry.update(m_romiGyro.getRotation2d(), getLeftDistanceMeter(), getRightDistanceMeter());
     // m_romiGyro.
+
+    Pose2d realPosition = m_odometry.getPoseMeters();
+    double deg = realPosition.getRotation().unaryMinus().getDegrees();
+    Rotation2d angle = Rotation2d.fromDegrees(deg + 45);
+
+    Translation2d translation2d = new Translation2d(Math.sqrt((1.5*1.5) + (1.5*1.5)), angle );
+    Rotation2d rotation2d = new Rotation2d(0);
+    Transform2d transform2d = new Transform2d(translation2d, rotation2d);
+
+    Pose2d pose2d = m_odometry.getPoseMeters().transformBy(transform2d);
+    m_field2d.setRobotPose(pose2d);
   }
 
   @Override

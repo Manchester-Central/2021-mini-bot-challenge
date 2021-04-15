@@ -8,20 +8,19 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.ArcDrive;
 import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.AutoCorrectedDrive;
 import frc.robot.commands.DistanceAutoDrive;
+import frc.robot.commands.PathDrive;
 import frc.robot.commands.PidDrive;
 import frc.robot.commands.PidGyro;
 import frc.robot.commands.PidTurn;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TimedAutoDrive;
-import frc.robot.commands.ToggleLED;
 import frc.robot.gamepads.Gamepad;
 import frc.robot.subsystems.RomiDrivetrain;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -35,15 +34,7 @@ public class RobotContainer {
   private DigitalOutput greenLed = new DigitalOutput(1);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   public Gamepad Driver = new Gamepad(0, "Driver");
-  private final Command m_autoCommand = new SequentialCommandGroup(
-    new AutoCorrectedDrive(6.803, m_romiDrivetrain),
-    new AutoCorrectedDrive(13.303, 20.897, true, m_romiDrivetrain),
-    new AutoCorrectedDrive(4.303, 8.205, true, m_romiDrivetrain),
-    new AutoCorrectedDrive(17.709, m_romiDrivetrain),
-    new AutoCorrectedDrive(4.303, 8.905, false, m_romiDrivetrain),
-    new AutoCorrectedDrive(13.850, 20.987, false, m_romiDrivetrain),
-    new AutoCorrectedDrive(2.5, m_romiDrivetrain)
-  );
+  private final Command m_autoCommand = new PathDrive("TurnTest", m_romiDrivetrain);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,6 +42,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
   }
 
   /**
@@ -61,18 +53,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
-    Driver.getButtonA().whenPressed(new ToggleLED(greenLed));
+    Driver.getButtonA().whenPressed(m_autoCommand);
     Driver.getButtonX().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
     Button b = Driver.getButtonB();
-    b.whileActiveOnce(new SequentialCommandGroup(
-      new DistanceAutoDrive(4.303, m_romiDrivetrain),
-      new ArcDrive(13.303, 20.897, true, m_romiDrivetrain),
-      new ArcDrive(5.5, 8, true, m_romiDrivetrain),
-      new DistanceAutoDrive(10.85, m_romiDrivetrain),
-      new ArcDrive(5.5, 10.4, false, m_romiDrivetrain),
-      new ArcDrive(13.303, 21, false, m_romiDrivetrain),
-      new DistanceAutoDrive(4.303, m_romiDrivetrain)
-    ));
+    b.whileActiveOnce(new SequentialCommandGroup(new DistanceAutoDrive(4.303, m_romiDrivetrain),
+        new ArcDrive(13.303, 20.897, true, m_romiDrivetrain), new ArcDrive(5.5, 8, true, m_romiDrivetrain),
+        new DistanceAutoDrive(10.85, m_romiDrivetrain), new ArcDrive(5.5, 10.4, false, m_romiDrivetrain),
+        new ArcDrive(13.303, 21, false, m_romiDrivetrain), new DistanceAutoDrive(4.303, m_romiDrivetrain)));
     Button y = Driver.getButtonY();
     TimedAutoDrive driveforward = new TimedAutoDrive(3, m_romiDrivetrain, 0.35, 0.35);
     TimedAutoDrive drivebackward = new TimedAutoDrive(3, m_romiDrivetrain, -0.35, -0.35);
@@ -83,21 +70,13 @@ public class RobotContainer {
     Driver.getButtonLB().whileActiveOnce(new PidDrive(-12, -12, m_romiDrivetrain));
     Driver.getButtonRT().whileActiveOnce(new PidGyro(90, m_romiDrivetrain));
     Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));
-    y.whileActiveOnce(new SequentialCommandGroup(
-      new PidDrive(17, 17, m_romiDrivetrain), 
-      new PidTurn(-90, m_romiDrivetrain),
-      new PidDrive(17, 17, m_romiDrivetrain),
-      new PidTurn(-90, m_romiDrivetrain),
-      new PidDrive(13.5, 13.5, m_romiDrivetrain),
-      new PidTurn(-90, m_romiDrivetrain),
-      new PidDrive(9, 9, m_romiDrivetrain),
-      new PidTurn(90, m_romiDrivetrain),
-      new PidDrive(13.5, 13.5, m_romiDrivetrain),
-      new PidTurn(90, m_romiDrivetrain),
-      new PidDrive(17, 17, m_romiDrivetrain),
-      new PidTurn(90, m_romiDrivetrain),
-      new PidDrive(17, 17, m_romiDrivetrain)
-    ));
+    y.whileActiveOnce(new SequentialCommandGroup(new PidDrive(17, 17, m_romiDrivetrain),
+        new PidTurn(-90, m_romiDrivetrain), new PidDrive(17, 17, m_romiDrivetrain), new PidTurn(-90, m_romiDrivetrain),
+        new PidDrive(13.5, 13.5, m_romiDrivetrain), new PidTurn(-90, m_romiDrivetrain),
+        new PidDrive(9, 9, m_romiDrivetrain), new PidTurn(90, m_romiDrivetrain),
+        new PidDrive(13.5, 13.5, m_romiDrivetrain), new PidTurn(90, m_romiDrivetrain),
+        new PidDrive(17, 17, m_romiDrivetrain), new PidTurn(90, m_romiDrivetrain),
+        new PidDrive(17, 17, m_romiDrivetrain)));
 
   }
 
@@ -111,3 +90,18 @@ public class RobotContainer {
     return m_autoCommand;
   }
 }
+// ⡿⠉⠄⠄⠄⠄⠈⠙⠿⠟⠛⠉⠉⠉⠄⠄⠄⠈⠉⠉⠉⠛⠛⠻⢿⣿⣿⣿⣿⣿
+// ⠁⠄⠄⠄⢀⡴⣋⣵⣮⠇⡀⠄⠄⠄⠄⠄⠄⢀⠄⠄⠄⡀⠄⠄⠄⠈⠛⠿⠋⠉
+// ⠄⠄⠄⢠⣯⣾⣿⡿⣳⡟⣰⣿⣠⣂⡀⢀⠄⢸⡄⠄⢀⣈⢆⣱⣤⡀⢄⠄⠄⠄
+// ⠄⠄⠄⣼⣿⣿⡟⣹⡿⣸⣿⢳⣿⣿⣿⣿⣴⣾⢻⣆⣿⣿⣯⢿⣿⣿⣷⣧⣀⣤
+// ⠄⠄⣼⡟⣿⠏⢀⣿⣇⣿⣏⣿⣿⣿⣿⣿⣿⣿⢸⡇⣿⣿⣿⣟⣿⣿⣿⣿⣏⠋
+// ⡆⣸⡟⣼⣯⠏⣾⣿⢸⣿⢸⣿⣿⣿⣿⣿⣿⡟⠸⠁⢹⡿⣿⣿⢻⣿⣿⣿⣿⠄
+// ⡇⡟⣸⢟⣫⡅⣶⢆⡶⡆⣿⣿⣿⣿⣿⢿⣛⠃⠰⠆⠈⠁⠈⠙⠈⠻⣿⢹⡏⠄
+// ⣧⣱⡷⣱⠿⠟⠛⠼⣇⠇⣿⣿⣿⣿⣿⣿⠃⣰⣿⣿⡆⠄⠄⠄⠄⠄⠉⠈⠄⠄
+// ⡏⡟⢑⠃⡠⠂⠄⠄⠈⣾⢻⣿⣿⡿⡹⡳⠋⠉⠁⠉⠙⠄⢀⠄⠄⠄⠄⠄⠂⠄
+// ⡇⠁⢈⢰⡇⠄⠄⡙⠂⣿⣿⣿⣿⣱⣿⡗⠄⠄⠄⢀⡀⠄⠈⢰⠄⠄⠄⠐⠄⠄
+// ⠄⠄⠘⣿⣧⠴⣄⣡⢄⣿⣿⣿⣷⣿⣿⡇⢀⠄⠤⠈⠁⣠⣠⣸⢠⠄⠄⠄⠄⠄
+// ⢀⠄⠄⣿⣿⣷⣬⣵⣿⣿⣿⣿⣿⣿⣿⣷⣟⢷⡶⢗⡰⣿⣿⠇⠘⠄⠄⠄⠄⠄
+// ⣿⠄⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣾⣿⣿⡟⢀⠃⠄⢸⡄⠁⣸
+// ⣿⠄⠄⠘⢿⣿⣿⣿⣿⣿⣿⢛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⢄⡆⠄⢀⣪⡆⠄⣿
+// ⡟⠄⠄⠄⠄⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣟⣻⣩⣾⣃⣴⣿⣿⡇⠸⢾

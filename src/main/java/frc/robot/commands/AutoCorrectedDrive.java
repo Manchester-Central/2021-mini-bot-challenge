@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.RomiDrivetrain;
 
 public class AutoCorrectedDrive extends CommandBase {
@@ -32,7 +33,7 @@ public class AutoCorrectedDrive extends CommandBase {
 
   public AutoCorrectedDrive(double turningRadius_in, double arcLength_in, boolean isLeft, RomiDrivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    double romiRadius = RomiDrivetrain.kTrackWidthInch / 2;
+    double romiRadius = Constants.kTrackWidthInch / 2;
     double outerRadius = turningRadius_in + romiRadius;
     double innerRadius = turningRadius_in - romiRadius;
     double leftTarget_in, rightTarget_in;

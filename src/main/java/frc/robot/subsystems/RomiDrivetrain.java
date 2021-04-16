@@ -119,6 +119,12 @@ public class RomiDrivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Left Meters per second", m_leftEncoder.getRate()); 
+    SmartDashboard.putNumber("Right Meters per second", m_rightEncoder.getRate());
+
+    SmartDashboard.putNumber("Left Meters", getLeftDistanceMeter());
+    SmartDashboard.putNumber("Right Meters", getRightDistanceMeter());
+
     SmartDashboard.putNumber("Left Inches", getLeftDistanceInch());
     SmartDashboard.putNumber("Right Inches", getRightDistanceInch());
     SmartDashboard.putNumber("Gyro X", m_romiGyro.getAngleX());

@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import java.nio.file.Path;
+
+import javax.sound.midi.Patch;
+
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,6 +23,7 @@ import frc.robot.commands.PidGyro;
 import frc.robot.commands.PidTurn;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TimedAutoDrive;
+import frc.robot.commands.ToggleLED;
 import frc.robot.gamepads.Gamepad;
 import frc.robot.subsystems.RomiDrivetrain;
 
@@ -34,8 +39,19 @@ public class RobotContainer {
   private DigitalOutput greenLed = new DigitalOutput(1);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   public Gamepad Driver = new Gamepad(0, "Driver");
-  private final Command m_autoCommand = new PathDrive("TurnTest", m_romiDrivetrain);
-
+  private final Command m_autoCommand = new SequentialCommandGroup(
+    new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),
+    new ToggleLED(greenLed),
+    new PathDrive("AutoNavFranticFetch2", m_romiDrivetrain),
+    new PathDrive("AutoNavFranticFetch3", m_romiDrivetrain),
+    new ToggleLED(greenLed),
+    new PathDrive("AutoNavFranticFetch4", m_romiDrivetrain),
+    new PathDrive("AutoNavFranticFetch5", m_romiDrivetrain),
+    new ToggleLED(greenLed),
+    new PathDrive("AutoNavFranticFetch6", m_romiDrivetrain),
+    new ToggleLED(greenLed)
+  );
+ // PathDrive("TurnTest", m_romiDrivetrain)
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */

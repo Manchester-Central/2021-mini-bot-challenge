@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.subsystems.Intake;
 
 public class RunIntake extends CommandBase {
@@ -15,7 +17,7 @@ public class RunIntake extends CommandBase {
   public RunIntake(Intake intake) {
 
     m_intake = intake;
-
+    SmartDashboard.setDefaultNumber("intakePower", 0.3);
     addRequirements(intake);
   }
 
@@ -26,7 +28,8 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.setPower(0.3);
+    double intakePower = SmartDashboard.getNumber("intakePower", 0.3);
+    m_intake.setPower(MathUtil.clamp(intakePower, -1, 1));
   }
 
   // Called once the command ends or is interrupted.

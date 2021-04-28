@@ -56,7 +56,7 @@ public class RobotContainer {
   );
  // PathDrive("TurnTest", m_romiDrivetrain)
 
-  private final Intake m_Intake = new Intake(3);
+  private final Intake m_intake = new Intake(3);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -75,7 +75,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
-    m_Intake.setDefaultCommand(new RunCommand(() -> m_Intake.setPower(0)));
+    m_intake.setDefaultCommand(new RunCommand(() -> m_intake.setPower(0), m_intake));
     Driver.getButtonA().whenPressed(m_autoCommand);
     Driver.getButtonX().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
     Button b = Driver.getButtonB();
@@ -90,7 +90,7 @@ public class RobotContainer {
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
     Driver.getButtonRB().whileActiveOnce(m_autoCommand);
-    Driver.getButtonLB().whileActiveOnce(new RunIntake(m_Intake));
+    Driver.getButtonLB().whileActiveOnce(new RunIntake(m_intake));
     Driver.getButtonRT().whileActiveOnce(new PidGyro(90, m_romiDrivetrain));
     Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));
     y.whileActiveOnce(new SequentialCommandGroup(new PidDrive(17, 17, m_romiDrivetrain),

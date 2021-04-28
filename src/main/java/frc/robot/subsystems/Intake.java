@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -18,6 +19,7 @@ public class Intake extends SubsystemBase {
 
   public void setPower(double power) {
     m_Pwm.setSpeed(power);
+    SmartDashboard.putNumber("ActualIntakePower", power);
   }
 
   @Override

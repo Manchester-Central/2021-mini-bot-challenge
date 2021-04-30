@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.ArcDrive;
@@ -21,10 +23,12 @@ import frc.robot.commands.PathDrive;
 import frc.robot.commands.PidDrive;
 import frc.robot.commands.PidGyro;
 import frc.robot.commands.PidTurn;
+import frc.robot.commands.RunIntake;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TimedAutoDrive;
 import frc.robot.commands.ToggleLED;
 import frc.robot.gamepads.Gamepad;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RomiDrivetrain;
 
 /**
@@ -38,20 +42,25 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DigitalOutput greenLed = new DigitalOutput(1);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
+  private final Intake m_intake = new Intake(3, 4);
   public Gamepad Driver = new Gamepad(0, "Driver");
-  private final Command m_autoCommand = new SequentialCommandGroup(
+  private final Command m_autoDriveCommand = new SequentialCommandGroup(
     new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch2", m_romiDrivetrain),
+    new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch3", m_romiDrivetrain),
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch4", m_romiDrivetrain),
-    new PathDrive("AutoNavFranticFetch5", m_romiDrivetrain),
-    new ToggleLED(greenLed),
-    new PathDrive("AutoNavFranticFetch6", m_romiDrivetrain),
     new ToggleLED(greenLed)
   );
+
+  private final Command m_autoCommand = new ParallelCommandGroup(
+   m_autoDriveCommand, new RunIntake(m_intake)
+  );
+
  // PathDrive("TurnTest", m_romiDrivetrain)
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -69,6 +78,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
+    m_intake.setDefaultCommand(new RunCommand(() -> m_intake.setPower(0), m_intake));
     Driver.getButtonA().whenPressed(m_autoCommand);
     Driver.getButtonX().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
     Button b = Driver.getButtonB();
@@ -83,7 +93,7 @@ public class RobotContainer {
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
     Driver.getButtonRB().whileActiveOnce(m_autoCommand);
-    Driver.getButtonLB().whileActiveOnce(new PidDrive(-12, -12, m_romiDrivetrain));
+    Driver.getButtonLB().whileActiveOnce(new RunIntake(m_intake));
     Driver.getButtonRT().whileActiveOnce(new PidGyro(90, m_romiDrivetrain));
     Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));
     y.whileActiveOnce(new SequentialCommandGroup(new PidDrive(17, 17, m_romiDrivetrain),

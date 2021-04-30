@@ -17,7 +17,7 @@ public class RunIntake extends CommandBase {
   public RunIntake(Intake intake) {
 
     m_intake = intake;
-    SmartDashboard.setDefaultNumber("intakePower", 0.3);
+    SmartDashboard.setDefaultNumber("intakePower", 1.0);
     addRequirements(intake);
   }
 

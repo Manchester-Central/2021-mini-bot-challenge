@@ -42,7 +42,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DigitalOutput greenLed = new DigitalOutput(1);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
-  private final Intake m_intake = new Intake(3, 4);
+  private final Intake m_intake = new Intake(3, 2);
   public Gamepad Driver = new Gamepad(0, "Driver");
   private final Command m_autoDriveCommand = new SequentialCommandGroup(
     new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),

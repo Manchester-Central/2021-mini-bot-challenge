@@ -48,12 +48,10 @@ public class RobotContainer {
     new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch2", m_romiDrivetrain),
+    new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch3", m_romiDrivetrain),
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch4", m_romiDrivetrain),
-    new PathDrive("AutoNavFranticFetch5", m_romiDrivetrain),
-    new ToggleLED(greenLed),
-    new PathDrive("AutoNavFranticFetch6", m_romiDrivetrain),
     new ToggleLED(greenLed)
   );
 

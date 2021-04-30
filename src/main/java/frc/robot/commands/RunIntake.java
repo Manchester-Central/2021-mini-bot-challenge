@@ -28,7 +28,7 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double intakePower = SmartDashboard.getNumber("intakePower", 0.3);
+    double intakePower = SmartDashboard.getNumber("intakePower", 1.0);
     m_intake.setPower(MathUtil.clamp(intakePower, -1, 1));
   }
 

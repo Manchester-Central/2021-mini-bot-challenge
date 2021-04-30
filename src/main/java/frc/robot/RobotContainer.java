@@ -56,7 +56,7 @@ public class RobotContainer {
   );
 
   private final Command m_autoCommand = new ParallelCommandGroup(
-   m_autoDriveCommand, new RunIntake(m_intake)
+   m_autoDriveCommand, new RunIntake(m_intake, true)
   );
 
  // PathDrive("TurnTest", m_romiDrivetrain)
@@ -92,8 +92,8 @@ public class RobotContainer {
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
-    Driver.getButtonRB().whileActiveOnce(m_autoCommand);
-    Driver.getButtonLB().whileActiveOnce(new RunIntake(m_intake));
+    Driver.getButtonRB().whileActiveOnce(new RunIntake(m_intake, false));
+    Driver.getButtonLB().whileActiveOnce(new RunIntake(m_intake, true));
     Driver.getButtonRT().whileActiveOnce(new PidGyro(90, m_romiDrivetrain));
     Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));
     y.whileActiveOnce(new SequentialCommandGroup(new PidDrive(17, 17, m_romiDrivetrain),

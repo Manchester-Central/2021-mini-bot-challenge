@@ -77,10 +77,10 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_romiDrivetrain.setDefaultCommand(new TankDrive(Driver, m_romiDrivetrain));
+    m_romiDrivetrain.setDefaultCommand(new ArcadeDrive(Driver, m_romiDrivetrain));
     m_intake.setDefaultCommand(new RunCommand(() -> m_intake.setPower(0), m_intake));
     Driver.getButtonA().whenPressed(m_autoCommand);
-    Driver.getButtonX().toggleWhenPressed(new ArcadeDrive(Driver, m_romiDrivetrain));
+    Driver.getButtonX().toggleWhenPressed(new TankDrive(Driver, m_romiDrivetrain));
     Button b = Driver.getButtonB();
     b.whileActiveOnce(new SequentialCommandGroup(new DistanceAutoDrive(4.303, m_romiDrivetrain),
         new ArcDrive(13.303, 20.897, true, m_romiDrivetrain), new ArcDrive(5.5, 8, true, m_romiDrivetrain),

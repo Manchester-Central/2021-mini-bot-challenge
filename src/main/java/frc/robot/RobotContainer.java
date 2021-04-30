@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -41,8 +42,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DigitalOutput greenLed = new DigitalOutput(1);
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
+  private final Intake m_intake = new Intake(3, 4);
   public Gamepad Driver = new Gamepad(0, "Driver");
-  private final Command m_autoCommand = new SequentialCommandGroup(
+  private final Command m_autoDriveCommand = new SequentialCommandGroup(
     new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch2", m_romiDrivetrain),
@@ -54,9 +56,12 @@ public class RobotContainer {
     new PathDrive("AutoNavFranticFetch6", m_romiDrivetrain),
     new ToggleLED(greenLed)
   );
- // PathDrive("TurnTest", m_romiDrivetrain)
 
-  private final Intake m_intake = new Intake(3, 4);
+  private final Command m_autoCommand = new ParallelCommandGroup(
+   m_autoDriveCommand, new RunIntake(m_intake)
+  );
+
+ // PathDrive("TurnTest", m_romiDrivetrain)
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

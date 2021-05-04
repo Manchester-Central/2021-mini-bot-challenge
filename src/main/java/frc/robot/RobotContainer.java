@@ -55,10 +55,11 @@ public class RobotContainer {
     new ToggleLED(greenLed)
   );
 
-  private final Command m_autoCommand = new ParallelCommandGroup(
+  private final Command m_autoAndIntakeCommand = new ParallelCommandGroup(
    m_autoDriveCommand, new RunIntake(m_intake, true)
   );
-
+  Command m_autoCommand = new SequentialCommandGroup ( m_autoAndIntakeCommand, new RunCommand(() -> m_intake.setPower(0), m_intake));
+  
  // PathDrive("TurnTest", m_romiDrivetrain)
   
   /**

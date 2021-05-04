@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
@@ -12,11 +14,17 @@ import frc.robot.subsystems.Intake;
 public class RunIntake extends CommandBase {
 
   private final Intake m_intake;
+  private final Supplier<Boolean> m_getIsDone;
 
   /** Creates a new SetIntakePower. */
   public RunIntake(Intake intake) {
+    this(intake, () -> false);
+  }
+
+  public RunIntake(Intake intake, Supplier<Boolean> getIsDone) {
 
     m_intake = intake;
+    m_getIsDone = getIsDone;
     SmartDashboard.setDefaultNumber("intakePower", 0.3);
     addRequirements(intake);
   }
@@ -39,6 +47,6 @@ public class RunIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_getIsDone.get();
   }
 }

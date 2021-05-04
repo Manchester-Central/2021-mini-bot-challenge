@@ -44,7 +44,9 @@ public class RobotContainer {
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   private final Intake m_intake = new Intake(3, 4);
   public Gamepad Driver = new Gamepad(0, "Driver");
+  boolean isAutoDone = false;
   private final Command m_autoDriveCommand = new SequentialCommandGroup(
+    new RunCommand(() -> isAutoDone = false),
     new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch2", m_romiDrivetrain),
@@ -52,11 +54,12 @@ public class RobotContainer {
     new PathDrive("AutoNavFranticFetch3", m_romiDrivetrain),
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch4", m_romiDrivetrain),
-    new ToggleLED(greenLed)
+    new ToggleLED(greenLed),
+    new RunCommand(() -> isAutoDone = true)
   );
 
   private final Command m_autoCommand = new ParallelCommandGroup(
-   m_autoDriveCommand, new RunIntake(m_intake)
+   m_autoDriveCommand, new RunIntake(m_intake, () -> isAutoDone)
   );
 
  // PathDrive("TurnTest", m_romiDrivetrain)

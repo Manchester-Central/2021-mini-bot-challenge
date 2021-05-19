@@ -11,6 +11,8 @@ import javax.sound.midi.Patch;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -44,7 +46,7 @@ public class RobotContainer {
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   private final Intake m_intake = new Intake(3, 2);
   public Gamepad Driver = new Gamepad(0, "Driver");
-  private final Command m_autoDriveCommand = new SequentialCommandGroup(
+  private final Command m_autoFranticFetchPath = new SequentialCommandGroup(
     new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch2", m_romiDrivetrain),
@@ -55,11 +57,16 @@ public class RobotContainer {
     new ToggleLED(greenLed)
   );
 
+  private final Command m_autoParkOnly = new PathDrive("AllianceAnticsParkOnly", m_romiDrivetrain);
+
   private final Command m_autoAndIntakeCommand = new ParallelCommandGroup(
-   m_autoDriveCommand, new RunIntake(m_intake, true)
+   m_autoFranticFetchPath, new RunIntake(m_intake, true)
   );
-  Command m_autoCommand = new SequentialCommandGroup ( m_autoAndIntakeCommand, new RunCommand(() -> m_intake.setPower(0), m_intake));
+  Command m_autoFranticFetchCommand = new SequentialCommandGroup ( m_autoAndIntakeCommand, new RunCommand(() -> m_intake.setPower(0), m_intake));
   
+  private final SendableChooser<Command> m_autoSelector = new SendableChooser<Command>();
+
+
  // PathDrive("TurnTest", m_romiDrivetrain)
   
   /**
@@ -69,6 +76,11 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    m_autoSelector.setDefaultOption("Park Only", m_autoParkOnly);
+    m_autoSelector.addOption("Frantic Fetch", m_autoFranticFetchCommand);
+    m_autoSelector.addOption("None", new RunCommand(() -> m_romiDrivetrain.TankDrive(0,0), m_romiDrivetrain));
+
+    SmartDashboard.putData(m_autoSelector);
   }
 
   /**
@@ -80,7 +92,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     m_romiDrivetrain.setDefaultCommand(new ArcadeDrive(Driver, m_romiDrivetrain));
     m_intake.setDefaultCommand(new RunCommand(() -> m_intake.setPower(0), m_intake));
-    Driver.getButtonA().whenPressed(m_autoCommand);
+    Driver.getButtonA().whenPressed(m_autoFranticFetchCommand);
     Driver.getButtonX().toggleWhenPressed(new TankDrive(Driver, m_romiDrivetrain));
     Button b = Driver.getButtonB();
     b.whileActiveOnce(new SequentialCommandGroup(new DistanceAutoDrive(4.303, m_romiDrivetrain),
@@ -114,7 +126,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return m_autoSelector.getSelected();
   }
 }
 // ⡿⠉⠄⠄⠄⠄⠈⠙⠿⠟⠛⠉⠉⠉⠄⠄⠄⠈⠉⠉⠉⠛⠛⠻⢿⣿⣿⣿⣿⣿

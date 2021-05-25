@@ -46,6 +46,7 @@ public class RobotContainer {
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   private final Intake m_intake = new Intake(3, 2);
   public Gamepad Driver = new Gamepad(0, "Driver");
+
   private final Command m_autoFranticFetchPath = new SequentialCommandGroup(
     new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),
     new ToggleLED(greenLed),
@@ -55,15 +56,27 @@ public class RobotContainer {
     new ToggleLED(greenLed),
     new PathDrive("AutoNavFranticFetch4", m_romiDrivetrain),
     new ToggleLED(greenLed)
-  );
+  ); 
 
-  private final Command m_autoParkOnly = new PathDrive("AllianceAnticsParkOnly", m_romiDrivetrain);
+  private final Command m_AllianceAnticsGuaranteedRpCommand = new PathDrive("AllianceAnticsGuaranteedRpCommand", m_romiDrivetrain);
 
   private final Command m_autoAndIntakeCommand = new ParallelCommandGroup(
    m_autoFranticFetchPath, new RunIntake(m_intake, true)
   );
-  Command m_autoFranticFetchCommand = new SequentialCommandGroup ( m_autoAndIntakeCommand, new RunCommand(() -> m_intake.setPower(0), m_intake));
+
+
+  private final Command m_autoParkOnly = new PathDrive("AllianceAnticsParkOnly", m_romiDrivetrain);
+
+ 
   
+  private final Command m_autoStraightBluePath = new SequentialCommandGroup(
+    new PathDrive("AllianceAnticsStraightBlue1", m_romiDrivetrain),
+    new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain)
+  );
+  private final Command m_autoStraightBlueCommand = new ParallelCommandGroup(
+    m_autoStraightBluePath, new RunIntake(m_intake, true)
+   );
+
   private final SendableChooser<Command> m_autoSelector = new SendableChooser<Command>();
 
 
@@ -77,11 +90,14 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_autoSelector.setDefaultOption("Park Only", m_autoParkOnly);
-    m_autoSelector.addOption("Frantic Fetch", m_autoFranticFetchCommand);
+    m_autoSelector.addOption("Frantic Fetch", m_autoAndIntakeCommand);
+    m_autoSelector.addOption("Straight Blue", m_autoStraightBlueCommand);
+    m_autoSelector.addOption("AllianceAnticsGuaranteedRP", m_AllianceAnticsGuaranteedRpCommand);
     m_autoSelector.addOption("None", new RunCommand(() -> m_romiDrivetrain.TankDrive(0,0), m_romiDrivetrain));
 
     SmartDashboard.putData(m_autoSelector);
   }
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -92,7 +108,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     m_romiDrivetrain.setDefaultCommand(new ArcadeDrive(Driver, m_romiDrivetrain));
     m_intake.setDefaultCommand(new RunCommand(() -> m_intake.setPower(0), m_intake));
-    Driver.getButtonA().whenPressed(m_autoFranticFetchCommand);
+    Driver.getButtonA().whenPressed(m_autoAndIntakeCommand);
     Driver.getButtonX().toggleWhenPressed(new TankDrive(Driver, m_romiDrivetrain));
     Button b = Driver.getButtonB();
     b.whileActiveOnce(new SequentialCommandGroup(new DistanceAutoDrive(4.303, m_romiDrivetrain),

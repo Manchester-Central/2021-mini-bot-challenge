@@ -67,7 +67,8 @@ public class RobotContainer {
 
   private final Command m_autoParkOnly = new PathDrive("AllianceAnticsParkOnly", m_romiDrivetrain);
 
- 
+  private final Command m_AllianceAntics5BallsCommand = new PathDrive("AllianceAntics5BallsCommand", m_romiDrivetrain);
+  private final Command m_AllianceAnticsAllBallsCommand = new PathDrive("AllianceAnticsAllBallsCommand", m_romiDrivetrain);
   
   private final Command m_autoStraightBluePath = new SequentialCommandGroup(
     new PathDrive("AllianceAnticsStraightBlue1", m_romiDrivetrain),
@@ -93,6 +94,8 @@ public class RobotContainer {
     m_autoSelector.addOption("Frantic Fetch", m_autoAndIntakeCommand);
     m_autoSelector.addOption("Straight Blue", m_autoStraightBlueCommand);
     m_autoSelector.addOption("AllianceAnticsGuaranteedRP", m_AllianceAnticsGuaranteedRpCommand);
+    m_autoSelector.addOption("AllianceAntics5Balls", m_AllianceAntics5BallsCommand);
+    m_autoSelector.addOption("AllianceAnticsAllBalls", m_AllianceAnticsAllBallsCommand);
     m_autoSelector.addOption("None", new RunCommand(() -> m_romiDrivetrain.TankDrive(0,0), m_romiDrivetrain));
 
     SmartDashboard.putData(m_autoSelector);

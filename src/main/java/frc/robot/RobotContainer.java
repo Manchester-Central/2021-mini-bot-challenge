@@ -67,8 +67,12 @@ public class RobotContainer {
 
   private final Command m_autoParkOnly = new PathDrive("AllianceAnticsParkOnly", m_romiDrivetrain);
 
-  private final Command m_AllianceAntics5BallsCommand = new PathDrive("AllianceAntics5BallsCommand", m_romiDrivetrain);
-  private final Command m_AllianceAnticsAllBallsCommand = new PathDrive("AllianceAnticsAllBallsCommand", m_romiDrivetrain);
+  private final Command m_AllianceAntics5BallsCommand = new ParallelCommandGroup(
+    new PathDrive("AllianceAntics5BallsCommand", m_romiDrivetrain), 
+    new RunIntake(m_intake, true));
+  private final Command m_AllianceAnticsAllBallsCommand = new ParallelCommandGroup(
+    new PathDrive("AllianceAnticsAllBallsCommand", m_romiDrivetrain),
+    new RunIntake(m_intake, true));
   
   private final Command m_autoStraightBluePath = new SequentialCommandGroup(
     new PathDrive("AllianceAnticsStraightBlue1", m_romiDrivetrain),

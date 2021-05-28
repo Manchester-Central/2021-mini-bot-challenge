@@ -48,45 +48,45 @@ public class RobotContainer {
   public Gamepad Driver = new Gamepad(0, "Driver");
 
   private final Command m_autoFranticFetchPath = new SequentialCommandGroup(
-    new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain),
-    new ToggleLED(greenLed),
-    new PathDrive("AutoNavFranticFetch2", m_romiDrivetrain),
-    new ToggleLED(greenLed),
-    new PathDrive("AutoNavFranticFetch3", m_romiDrivetrain),
-    new ToggleLED(greenLed),
-    new PathDrive("AutoNavFranticFetch4", m_romiDrivetrain),
-    new ToggleLED(greenLed)
-  ); 
+      new PathDrive("AutoNavFranticFetch1", m_romiDrivetrain), new ToggleLED(greenLed),
+      new PathDrive("AutoNavFranticFetch2", m_romiDrivetrain), new ToggleLED(greenLed),
+      new PathDrive("AutoNavFranticFetch3", m_romiDrivetrain), new ToggleLED(greenLed),
+      new PathDrive("AutoNavFranticFetch4", m_romiDrivetrain), new ToggleLED(greenLed));
 
-  private final Command m_AllianceAnticsGuaranteedRpCommand = new PathDrive("AllianceAnticsGuaranteedRpCommand", m_romiDrivetrain);
-
-  private final Command m_autoAndIntakeCommand = new ParallelCommandGroup(
-   m_autoFranticFetchPath, new RunIntake(m_intake, true)
-  );
-
+  private final Command m_autoAndIntakeCommand = new ParallelCommandGroup(m_autoFranticFetchPath,
+      new RunIntake(m_intake, true));
 
   private final Command m_autoParkOnly = new PathDrive("AllianceAnticsParkOnly", m_romiDrivetrain);
 
   private final Command m_AllianceAntics5BallsCommand = new ParallelCommandGroup(
-    new PathDrive("AllianceAntics5BallsCommand", m_romiDrivetrain), 
-    new RunIntake(m_intake, true));
+      new SequentialCommandGroup(
+        new PathDrive("AllianceAntics5Balls", m_romiDrivetrain),
+        new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain)),
+      new RunIntake(m_intake, true));
+
   private final Command m_AllianceAnticsAllBallsCommand = new ParallelCommandGroup(
-    new PathDrive("AllianceAnticsAllBallsCommand", m_romiDrivetrain),
-    new RunIntake(m_intake, true));
-  
+      new SequentialCommandGroup(
+        new PathDrive("AllianceAnticsAllBalls", m_romiDrivetrain),
+        new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain)),
+      new RunIntake(m_intake, true));
+
   private final Command m_autoStraightBluePath = new SequentialCommandGroup(
-    new PathDrive("AllianceAnticsStraightBlue1", m_romiDrivetrain),
-    new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain)
-  );
-  private final Command m_autoStraightBlueCommand = new ParallelCommandGroup(
-    m_autoStraightBluePath, new RunIntake(m_intake, true)
-   );
+        new PathDrive("AllianceAnticsStraightBlue1", m_romiDrivetrain),
+        new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain));
+      
+      private final Command m_AllianceAnticsGuaranteedRpCommand = new ParallelCommandGroup(
+      new SequentialCommandGroup(
+        new PathDrive("AllianceAnticsGuaranteedRP", m_romiDrivetrain),
+        new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain)),
+      new RunIntake(m_intake, true));
+
+  private final Command m_autoStraightBlueCommand = new ParallelCommandGroup(m_autoStraightBluePath,
+      new RunIntake(m_intake, true));
 
   private final SendableChooser<Command> m_autoSelector = new SendableChooser<Command>();
 
+  // PathDrive("TurnTest", m_romiDrivetrain)
 
- // PathDrive("TurnTest", m_romiDrivetrain)
-  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -100,11 +100,10 @@ public class RobotContainer {
     m_autoSelector.addOption("AllianceAnticsGuaranteedRP", m_AllianceAnticsGuaranteedRpCommand);
     m_autoSelector.addOption("AllianceAntics5Balls", m_AllianceAntics5BallsCommand);
     m_autoSelector.addOption("AllianceAnticsAllBalls", m_AllianceAnticsAllBallsCommand);
-    m_autoSelector.addOption("None", new RunCommand(() -> m_romiDrivetrain.TankDrive(0,0), m_romiDrivetrain));
+    m_autoSelector.addOption("None", new RunCommand(() -> m_romiDrivetrain.TankDrive(0, 0), m_romiDrivetrain));
 
     SmartDashboard.putData(m_autoSelector);
   }
-
 
   /**
    * Use this method to define your button->command mappings. Buttons can be

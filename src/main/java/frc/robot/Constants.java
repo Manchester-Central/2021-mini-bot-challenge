@@ -15,7 +15,7 @@ package frc.robot;
 public final class Constants {
 
     //public static final double kRamseteB = 2.0;
-    public static final double kRamseteB = 7.0;
+    public static final double kRamseteB = 2.0;
     public static final double kRamseteZeta = 0.7;
     
     //TODO Figure out voltage

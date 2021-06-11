@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
-
-import javax.sound.midi.Patch;
-
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.ArcDrive;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutoScoreAndPark;
 import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.PathDrive;
 import frc.robot.commands.PidDrive;
@@ -57,31 +54,10 @@ public class RobotContainer {
       new RunIntake(m_intake, true));
 
   private final Command m_autoParkOnly = new PathDrive("AllianceAnticsParkOnly", m_romiDrivetrain);
-
-  private final Command m_AllianceAntics5BallsCommand = new ParallelCommandGroup(
-      new SequentialCommandGroup(
-        new PathDrive("AllianceAntics5Balls", m_romiDrivetrain),
-        new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain)),
-      new RunIntake(m_intake, true));
-
-  private final Command m_AllianceAnticsAllBallsCommand = new ParallelCommandGroup(
-      new SequentialCommandGroup(
-        new PathDrive("AllianceAnticsAllBalls", m_romiDrivetrain),
-        new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain)),
-      new RunIntake(m_intake, true));
-
-  private final Command m_autoStraightBluePath = new SequentialCommandGroup(
-        new PathDrive("AllianceAnticsStraightBlue1", m_romiDrivetrain),
-        new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain));
-      
-      private final Command m_AllianceAnticsGuaranteedRpCommand = new ParallelCommandGroup(
-      new SequentialCommandGroup(
-        new PathDrive("AllianceAnticsGuaranteedRP", m_romiDrivetrain),
-        new PathDrive("AllianceAnticsBluePark", m_romiDrivetrain)),
-      new RunIntake(m_intake, true));
-
-  private final Command m_autoStraightBlueCommand = new ParallelCommandGroup(m_autoStraightBluePath,
-      new RunIntake(m_intake, true));
+  private final Command m_AllianceAntics5BallsCommand = new AutoScoreAndPark("AllianceAntics5Balls", m_intake, m_romiDrivetrain);
+  private final Command m_AllianceAnticsAllBallsCommand = new AutoScoreAndPark("AllianceAnticsAllBalls", m_intake, m_romiDrivetrain);
+  private final Command m_autoStraightBlueCommand = new AutoScoreAndPark("AllianceAnticsStraightBlue1", m_intake, m_romiDrivetrain);
+  private final Command m_AllianceAnticsGuaranteedRpCommand = new AutoScoreAndPark("AllianceAnticsGuaranteedRP", m_intake, m_romiDrivetrain);
 
   private final SendableChooser<Command> m_autoSelector = new SendableChooser<Command>();
 

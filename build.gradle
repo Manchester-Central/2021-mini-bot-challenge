@@ -19,7 +19,7 @@ task getRomiIPAddress {
     doLast {
         def ipAddress = "10.0.0.2"
         try {
-            ipAddress = Inet4Address.getByName("wpilibpi").getHostAddress()
+         //   ipAddress = Inet4Address.getByName("wpilibpi").getHostAddress()
         } catch(getHostError) {
             println "An error occurred getting IP host address for 'wpilibpi'. Using default IP address."
             println "Error: " + getHostError

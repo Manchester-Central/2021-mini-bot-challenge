@@ -12,17 +12,26 @@ import frc.robot.subsystems.Intake;
 public class RunIntake extends CommandBase {
 
   private final Intake m_intake;
-  private final double m_direction;
+  private final double m_frontDirection;
+  private final double m_backDirection;
+
 
   /** Creates a new SetIntakePower. */
-  public RunIntake(Intake intake, boolean input) {
+  public RunIntake(Intake intake, boolean frontForward, boolean backForward) {
 
     m_intake = intake;
-	if (input) {
-		m_direction = 1.0;
+	if (frontForward) {
+		m_frontDirection = 1.0;
 	}
 	else {
-		m_direction = -1.0;
+    m_frontDirection = -1.0;
+  }
+  
+  if (backForward) {
+		m_backDirection = 1.0;
+	}
+	else {
+		m_backDirection = -1.0;
 	}
     SmartDashboard.setDefaultNumber("intakePower", 1.0);
     addRequirements(intake);
@@ -36,7 +45,7 @@ public class RunIntake extends CommandBase {
   @Override
   public void execute() {
     double intakePower = SmartDashboard.getNumber("intakePower", 1.0);
-    m_intake.setPower(m_direction * MathUtil.clamp(intakePower, -1, 1));
+    m_intake.setPower(m_frontDirection * MathUtil.clamp(intakePower, -1, 1),m_backDirection * MathUtil.clamp(intakePower, -1, 1));
   }
 
   // Called once the command ends or is interrupted.

@@ -20,7 +20,6 @@ import frc.robot.commands.AutoScoreAndPark;
 import frc.robot.commands.DistanceAutoDrive;
 import frc.robot.commands.PathDrive;
 import frc.robot.commands.PidDrive;
-import frc.robot.commands.PidGyro;
 import frc.robot.commands.PidTurn;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.TankDrive;
@@ -51,13 +50,20 @@ public class RobotContainer {
       new PathDrive("AutoNavFranticFetch4", m_romiDrivetrain), new ToggleLED(greenLed));
 
   private final Command m_autoAndIntakeCommand = new ParallelCommandGroup(m_autoFranticFetchPath,
-      new RunIntake(m_intake, true));
+      new RunIntake(m_intake, true, true));
 
   private final Command m_autoParkOnly = new PathDrive("AllianceAnticsParkOnly", m_romiDrivetrain);
   private final Command m_AllianceAntics5BallsCommand = new AutoScoreAndPark("AllianceAntics5Balls", m_intake, m_romiDrivetrain);
   private final Command m_AllianceAnticsAllBallsCommand = new AutoScoreAndPark("AllianceAnticsAllBalls", m_intake, m_romiDrivetrain);
   private final Command m_autoStraightBlueCommand = new AutoScoreAndPark("AllianceAnticsStraightBlue1", m_intake, m_romiDrivetrain);
   private final Command m_AllianceAnticsGuaranteedRpCommand = new AutoScoreAndPark("AllianceAnticsGuaranteedRP", m_intake, m_romiDrivetrain);
+  private final Command m_StaightBlueStopAndGo = new AutoScoreAndPark( new SequentialCommandGroup(
+    new PathDrive("AllianceAnticsStraightBlueStop1", m_romiDrivetrain),
+    new PathDrive("AllianceAnticsStraightBlueStop2", m_romiDrivetrain),
+    new PathDrive("AllianceAnticsStraightBlueStop3", m_romiDrivetrain),
+    new PathDrive("AllianceAnticsStraightBlueStop4", m_romiDrivetrain)
+  ), m_intake, m_romiDrivetrain);
+
 
   private final SendableChooser<Command> m_autoSelector = new SendableChooser<Command>();
 
@@ -70,12 +76,14 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    m_autoSelector.setDefaultOption("AllianceAnticsBlueStopAndGo", m_StaightBlueStopAndGo);
     m_autoSelector.setDefaultOption("Park Only", m_autoParkOnly);
     m_autoSelector.addOption("Frantic Fetch", m_autoAndIntakeCommand);
     m_autoSelector.addOption("Straight Blue", m_autoStraightBlueCommand);
     m_autoSelector.addOption("AllianceAnticsGuaranteedRP", m_AllianceAnticsGuaranteedRpCommand);
     m_autoSelector.addOption("AllianceAntics5Balls", m_AllianceAntics5BallsCommand);
     m_autoSelector.addOption("AllianceAnticsAllBalls", m_AllianceAnticsAllBallsCommand);
+    m_autoSelector.addOption("Park Only", m_autoParkOnly);
     m_autoSelector.addOption("None", new RunCommand(() -> m_romiDrivetrain.TankDrive(0, 0), m_romiDrivetrain));
 
     SmartDashboard.putData(m_autoSelector);
@@ -103,10 +111,10 @@ public class RobotContainer {
     y.and(b).whenActive(new SequentialCommandGroup(driveforward, drivebackward));
     Driver.getButtonStart().whenPressed(() -> m_romiDrivetrain.resetEncoders());
     Driver.getButtonSelect().whenPressed(new DistanceAutoDrive(12, m_romiDrivetrain));
-    Driver.getButtonRB().whileActiveOnce(new RunIntake(m_intake, false));
-    Driver.getButtonLB().whileActiveOnce(new RunIntake(m_intake, true));
-    Driver.getButtonRT().whileActiveOnce(new PidGyro(90, m_romiDrivetrain));
-    Driver.getButtonLT().whileActiveOnce(new PidTurn(-90, m_romiDrivetrain));
+    Driver.getButtonRB().whileActiveOnce(new RunIntake(m_intake, false, false));
+    Driver.getButtonLB().whileActiveOnce(new RunIntake(m_intake, true, true));
+    Driver.getButtonRT().whileActiveOnce(new RunIntake(m_intake, true, false));
+    Driver.getButtonLT().whileActiveOnce(new RunIntake(m_intake, false, true));
     y.whileActiveOnce(new SequentialCommandGroup(new PidDrive(17, 17, m_romiDrivetrain),
         new PidTurn(-90, m_romiDrivetrain), new PidDrive(17, 17, m_romiDrivetrain), new PidTurn(-90, m_romiDrivetrain),
         new PidDrive(13.5, 13.5, m_romiDrivetrain), new PidTurn(-90, m_romiDrivetrain),

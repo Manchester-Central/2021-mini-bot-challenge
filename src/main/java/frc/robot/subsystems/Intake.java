@@ -24,6 +24,10 @@ public class Intake extends SubsystemBase {
     m_PwmBack.setSpeed(power);
     SmartDashboard.putNumber("ActualIntakePower", power);
   }
+  public void setPower(double frontPower, double backPower) {
+    m_PwmFront.setSpeed(frontPower);
+    m_PwmBack.setSpeed(backPower);
+  }
 
   @Override
   public void periodic() {

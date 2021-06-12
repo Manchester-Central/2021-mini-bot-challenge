@@ -63,6 +63,8 @@ public class RobotContainer {
     new PathDrive("AllianceAnticsStraightBlueStop3", m_romiDrivetrain),
     new PathDrive("AllianceAnticsStraightBlueStop4", m_romiDrivetrain)
   ), m_intake, m_romiDrivetrain);
+  private final Command m_TestCommand = new AutoScoreAndPark("AllianceAnticsStraightBlueStop1Copy", m_intake, m_romiDrivetrain);
+
 
 
   private final SendableChooser<Command> m_autoSelector = new SendableChooser<Command>();
@@ -77,13 +79,13 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_autoSelector.setDefaultOption("AllianceAnticsBlueStopAndGo", m_StaightBlueStopAndGo);
-    m_autoSelector.setDefaultOption("Park Only", m_autoParkOnly);
     m_autoSelector.addOption("Frantic Fetch", m_autoAndIntakeCommand);
     m_autoSelector.addOption("Straight Blue", m_autoStraightBlueCommand);
     m_autoSelector.addOption("AllianceAnticsGuaranteedRP", m_AllianceAnticsGuaranteedRpCommand);
     m_autoSelector.addOption("AllianceAntics5Balls", m_AllianceAntics5BallsCommand);
     m_autoSelector.addOption("AllianceAnticsAllBalls", m_AllianceAnticsAllBallsCommand);
     m_autoSelector.addOption("Park Only", m_autoParkOnly);
+    m_autoSelector.addOption("Test", m_TestCommand);
     m_autoSelector.addOption("None", new RunCommand(() -> m_romiDrivetrain.TankDrive(0, 0), m_romiDrivetrain));
 
     SmartDashboard.putData(m_autoSelector);
